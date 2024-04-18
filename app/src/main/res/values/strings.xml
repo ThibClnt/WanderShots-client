@@ -4,4 +4,6 @@
     <string name="welcome_to_wandershot">Welcome to WanderShot</string>
     <string name="login">Login</string>
     <string name="sign_in">Sign In</string>
+    <string name="home_tab">Home</string>
+    <string name="walks_history_tab">Walks history</string>
 </resources>
