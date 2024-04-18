@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">WanderShots</string>
     <string name="username_label">Username</string>
+    <string name="welcome_to_wandershot">Welcome to WanderShot</string>
+    <string name="login">Login</string>
+    <string name="sign_in">Sign In</string>
 </resources>
