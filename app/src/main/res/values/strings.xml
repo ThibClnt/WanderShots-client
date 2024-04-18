@@ -6,4 +6,7 @@
     <string name="sign_in">Sign In</string>
     <string name="home_tab">Home</string>
     <string name="walks_history_tab">Walks history</string>
+    <string name="totalPoints">Total Points</string>
+    <string name="distanceTraveled">Distance Traveled</string>
+
 </resources>
