@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="username_label">Nom d\'utilisateur</string>
+    <string name="home_tab">Accueil</string>
+    <string name="walks_history_tab">Historique des marches</string>
 </resources>

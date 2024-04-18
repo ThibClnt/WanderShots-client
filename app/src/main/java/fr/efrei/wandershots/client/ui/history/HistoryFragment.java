@@ -28,5 +28,4 @@ public class HistoryFragment extends Fragment {
         binding = FragmentHistoryBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
-
 }
