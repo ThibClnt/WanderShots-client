@@ -3,9 +3,10 @@
     <string name="username_label">Nom d\'utilisateur</string>
     <string name="home_tab">Accueil</string>
     <string name="walks_history_tab">Historique des marches</string>
-    <string name="welcome_to_wandershot">Bienvenue à WanderShot</string>
-    <string name="login">Se Connecter</string>
+    <string name="welcome_to_wandershot">Bienvenue sur WanderShot</string>
+    <string name="login">Se connecter</string>
     <string name="sign_in">S\'enregistrer</string>
     <string name="totalPoints">Total Points</string>
     <string name="distanceTraveled">Distance Parcourue</string>
+    <string name="password_label">Mot de passe</string>
 </resources>
