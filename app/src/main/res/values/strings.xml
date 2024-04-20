@@ -9,5 +9,7 @@
     <string name="totalPoints">Total Points</string>
     <string name="distanceTraveled">Distance Traveled</string>
     <string name="password_label">Password</string>
+    <string name="pointUnit">pts</string>
+    <string name="distanceUnit">km</string>
 
 </resources>
