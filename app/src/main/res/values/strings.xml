@@ -9,5 +9,9 @@
     <string name="totalPoints">Total Points</string>
     <string name="distanceTraveled">Distance Traveled</string>
     <string name="password_label">Password</string>
+    <string name="please_register">"Please register by entering your username and password  "</string>
+    <string name="save">save</string>
+    <string name="confirm_password">confirm password</string>
+
 
 </resources>
