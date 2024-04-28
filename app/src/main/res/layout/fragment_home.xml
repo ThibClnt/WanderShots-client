@@ -4,114 +4,164 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     android:background="@color/light"
     android:orientation="vertical"
     android:weightSum="10"
     tools:context=".ui.home.HomeFragment">
-    <LinearLayout
-        android:layout_height="0dp"
-        android:layout_weight="4"
-        android:layout_width="match_parent"
-        android:layout_margin="20dp"
-        android:weightSum="2"
-        android:orientation="vertical"
-        android:background="@drawable/rounded_background">
 
-        <LinearLayout
+    <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="2">
+            android:layout_weight="4"
+            android:id="@+id/statsCardView"
+            app:cardCornerRadius="15dp"
+            android:layout_margin="8dp"
+            >
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="32dp">
 
-                <TextView
-                    android:id="@+id/textViewTotalPoints"
+            <TextView
+                    android:id="@+id/totalPointsTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/totalPoints"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:textColor="@color/secondary" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textViewTotalPointsValue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="12345 pts"
-                    android:textStyle="bold"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingTop="70dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:weightSum="2">
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/DistanceTraveled"
+                        android:id="@+id/totalPointsValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="32dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/black"
+                        android:textAlignment="viewEnd"
+                        android:layout_weight="4" />
+
+                <TextView
+                        android:id="@+id/totalPointsUnit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
+                        android:layout_weight="1"
+                        android:text="@string/pointUnit"
+                        android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <TextView
+                    android:id="@+id/distanceTraveledTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingTop="10dp"
-                    android:paddingRight="10dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/distanceTraveled"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@color/secondary" />
-            </LinearLayout>
+
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/DistanceTraveledValue"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="1000 kms"
-                    android:textStyle="bold"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:paddingTop="70dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textColor="@color/black" />
+                    android:layout_height="match_parent">
+
+                <TextView
+                        android:id="@+id/distanceTraveledValue"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="32dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/black"
+                        android:textAlignment="viewEnd"
+                        android:layout_weight="4" />
+
+                <TextView
+                        android:id="@+id/distanceTraveledUnit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:textColor="@color/black"
+                        android:textAlignment="viewStart"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/distanceUnit" />
             </LinearLayout>
 
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:id="@+id/placesCardView"
+            app:cardCornerRadius="15dp"
+            android:layout_margin="8dp" >
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="32dp">
+
+            <TextView
+                    android:id="@+id/trendingPlacesTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/trendingPlacesTitle"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textColor="@color/secondary" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/carousel_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="196dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+        <TextView
+                android:text="@string/engagment_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:layout_weight="4"
+                android:layout_gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                app:cornerRadius="10dp"
+                android:text="@string/start_walk_button"
+                android:backgroundTint="@color/primary"
+                android:layout_gravity="center_vertical" />
     </LinearLayout>
+
 </LinearLayout>

@@ -1,17 +1,28 @@
 <resources>
+    <!-- Login fragment -->
     <string name="app_name" translatable="false">WanderShots</string>
-    <string name="username_label">Username</string>
     <string name="welcome_to_wandershot">Welcome to WanderShot</string>
+    <string name="username_label">Username</string>
+    <string name="password_label">Password</string>
     <string name="login">Login</string>
     <string name="sign_in">Sign In</string>
+  
+    <!-- Sign in fragment -->
+    <string name="please_register">"Please register"</string>
+    <string name="save">Save</string>
+    <string name="confirm_password">Confirm password</string>
+  
+    <!-- Home fragment -->
     <string name="home_tab">Home</string>
-    <string name="walks_history_tab">Walks history</string>
     <string name="totalPoints">Total Points</string>
     <string name="distanceTraveled">Distance Traveled</string>
-    <string name="password_label">Password</string>
-    <string name="please_register">"Please register by entering your username and password  "</string>
-    <string name="save">save</string>
-    <string name="confirm_password">confirm password</string>
-
+    <string name="pointUnit">pts</string>
+    <string name="distanceUnit">km</string>
+    <string name="engagment_label">Want to wander?</string>
+    <string name="start_walk_button">Start</string>
+    <string name="trendingPlacesTitle">Trending places</string>
+  
+    <!-- Walks history fragment -->
+    <string name="walks_history_tab">Walks history</string>
 
 </resources>
