@@ -1,5 +1,7 @@
 package fr.efrei.wandershots.client;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
@@ -10,11 +12,13 @@ import fr.efrei.wandershots.client.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         ActivityMainBinding binding = ActivityMainBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
+        sharedPreferences = getSharedPreferences("MyAuthenticationPrefs", Context.MODE_PRIVATE);
     }
 }

@@ -9,4 +9,7 @@
     <string name="totalPoints">Total Points</string>
     <string name="distanceTraveled">Distance Parcourue</string>
     <string name="password_label">Mot de passe</string>
+    <string name="please_register">veuillez vous enregistrer</string>
+    <string name="save">sauvegarder</string>
+    <string name="confirm_password">confirmer mdp</string>
 </resources>
