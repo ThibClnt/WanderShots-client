@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="username_label">Nom d\'utilisateur</string>
-    <string name="home_tab">Accueil</string>
-    <string name="walks_history_tab">Historique des marches</string>
     <string name="welcome_to_wandershot">Bienvenue sur WanderShot</string>
+    <string name="username_label">Nom d\'utilisateur</string>
+    <string name="password_label">Mot de passe</string>
     <string name="login">Se connecter</string>
     <string name="sign_in">S\'enregistrer</string>
+    <string name="home_tab">Accueil</string>
     <string name="totalPoints">Total Points</string>
     <string name="distanceTraveled">Distance Parcourue</string>
-    <string name="password_label">Mot de passe</string>
     <string name="pointUnit">pts</string>
     <string name="distanceUnit">km</string>
+    <string name="engagment_label">Envie de flâner ?</string>
+    <string name="start_walk_button">Commencer</string>
+    <string name="walks_history_tab">Historique des marches</string>
+    <string name="trendingPlacesTitle">Lieux tendances</string>
 </resources>
