@@ -7,7 +7,7 @@
         android:orientation="vertical"
         android:weightSum="10"
         android:background="@drawable/auth_background"
-        tools:context=".AuthenticationFragment"
+        tools:context=".ui.authentication.AuthenticationFragment"
         android:gravity="center_horizontal">
 
     <TextView
