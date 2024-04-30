@@ -39,7 +39,7 @@
             <ImageView
                     android:id="@+id/pictureImageView"
                     android:layout_width="290dp"
-                    android:layout_height="515dp"
+                    android:layout_height="386dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:layout_gravity="center_horizontal" />
@@ -54,18 +54,17 @@
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusTopStart="10dp"
                     app:boxStrokeColor="@color/primary"
-                    android:id="@+id/pictureTitleInput"
                     android:layout_marginBottom="12dp"
                     android:hint="@string/picture_title_input">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:singleLine="true"
                         android:inputType="text|textEmailAddress"
                         android:textColorLink="@color/secondary"
                         android:outlineProvider="none"
-                        android:id="@+id/loginInput" />
+                        android:id="@+id/pictureTitleInput" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
