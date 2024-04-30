@@ -25,4 +25,8 @@
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Walks history</string>
 
+    <!-- Picture fragment -->
+    <string name="take_picture_button">Take a picture</string>
+    <string name="picture_title_input">Title</string>
+    <string name="save_picture_button">Save picture</string>
 </resources>

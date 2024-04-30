@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        android:background="@color/light"
+        android:orientation="vertical"
+        android:weightSum="11"
+        tools:context=".ui.home.HomeFragment">
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="600dp"
+            android:layout_weight="8"
+            android:id="@+id/statsCardView"
+            app:cardCornerRadius="15dp"
+            android:layout_margin="8dp">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingVertical="8dp"
+                android:paddingStart="24dp"
+                android:paddingEnd="32dp"
+                android:layout_gravity="start">
+
+            <Button
+                    android:layout_width="256dp"
+                    android:layout_height="64dp"
+                    app:cornerRadius="10dp"
+                    android:backgroundTint="@color/primary"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:text="@string/take_picture_button"
+                    android:id="@+id/takePictureButton" />
+
+            <ImageView
+                    android:id="@+id/pictureImageView"
+                    android:layout_width="290dp"
+                    android:layout_height="515dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_gravity="center_horizontal" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:passwordToggleEnabled="false"
+                    app:boxBackgroundMode="outline"
+                    app:boxCornerRadiusBottomEnd="10dp"
+                    app:boxCornerRadiusBottomStart="10dp"
+                    app:boxCornerRadiusTopEnd="10dp"
+                    app:boxCornerRadiusTopStart="10dp"
+                    app:boxStrokeColor="@color/primary"
+                    android:id="@+id/pictureTitleInput"
+                    android:layout_marginBottom="12dp"
+                    android:hint="@string/picture_title_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:inputType="text|textEmailAddress"
+                        android:textColorLink="@color/secondary"
+                        android:outlineProvider="none"
+                        android:id="@+id/loginInput" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            app:cornerRadius="10dp"
+            android:layout_margin="24dp"
+            android:backgroundTint="@color/primary"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:id="@+id/savePictureButton"
+            android:text="@string/save_picture_button" />
+
+</LinearLayout>
