@@ -24,5 +24,14 @@
   
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Walks history</string>
+    <string name="stop">stop</string>
+    <string name="take_picture">take picture</string>
+    <string name="my_position">My position</string>
+    <string name="traveled">traveled</string>
+    <string name="started_at">start</string>
+    <string name="lasted">lasted</string>
+    <string name="pace">pace</string>
+    <string name="lasted">lasted</string>
+
 
 </resources>

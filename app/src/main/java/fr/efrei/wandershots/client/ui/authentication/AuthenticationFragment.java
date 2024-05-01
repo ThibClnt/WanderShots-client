@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentAuthenticationBinding;
 import fr.efrei.wandershots.client.ui.home.HomeFragment;
+import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 
 
 public class AuthenticationFragment extends Fragment {
@@ -76,7 +77,7 @@ public class AuthenticationFragment extends Fragment {
     }
     private void navigateToHomeFragment() {
         // Create an instance of the new fragment
-        HomeFragment homeFragment = new HomeFragment();
+        TabbedFragment homeFragment = TabbedFragment.newInstance();
 
         // Get the FragmentManager
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();

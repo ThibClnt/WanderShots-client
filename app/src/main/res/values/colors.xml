@@ -6,4 +6,5 @@
     <color name="secondary">#FF83C5BE</color>
     <color name="variation">#CEE2E9FF</color>
     <color name="light">#FFEDF6F9</color>
+    <color name="stop_red">#F44336</color>
 </resources>

@@ -24,4 +24,13 @@
   
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Historique des marches</string>
+    <string name="stop">arreter</string>
+    <string name="take_picture">prendre photo</string>
+    <string name="my_position">Ma position</string>
+    <string name="traveled">parcouru</string>
+    <string name="started_at">début</string>
+    <string name="lasted">durée</string>
+    <string name="pace">rythme</string>
+
+
 </resources>
