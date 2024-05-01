@@ -22,8 +22,18 @@ public class CredentialsManager {
     private final UserRepository userRepository;
     private final SharedPreferences sharedPreferences;
 
+    private static volatile CredentialsManager instance;
 
-    public CredentialsManager(Context context) {
+    public static CredentialsManager getInstance(Context context) {
+        synchronized (CredentialsManager.class) {
+            if (instance == null) {
+                instance = new CredentialsManager(context);
+            }
+        }
+        return instance;
+    }
+
+    private CredentialsManager(Context context) {
         this.userRepository = UserRepository.getInstance();
         this.sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
     }
@@ -41,13 +51,14 @@ public class CredentialsManager {
      */
     private boolean authenticate(String username, String hashedPassword, boolean putInCache) throws CredentialsManagmentException {
         try {
-            User user = userRepository.getUser(username);
+            User user = userRepository.getUser(username, hashedPassword);
 
             if (user == null) {
                 return false;
             }
 
             if (putInCache) {
+                user.setPassword(hashedPassword);
                 cacheCredentials(user);
             }
 
@@ -63,6 +74,11 @@ public class CredentialsManager {
      */
     public boolean isAuthenticated() throws CredentialsManagmentException {
         User user = getCredentialsFromCache();
+
+        if (user == null) {
+            return false;
+        }
+
         return authenticate(user.getUsername(), user.getPassword(), false);
     }
 

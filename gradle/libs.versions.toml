@@ -30,7 +30,7 @@ annotation = { group = "androidx.annotation", name = "annotation", version.ref =
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glideCompiler" }
-mysql-connector-java = "mysql:mysql-connector-java:8.0.33"
+mysql-connector-java = "mysql:mysql-connector-java:5.1.49"
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

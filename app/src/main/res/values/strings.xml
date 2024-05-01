@@ -1,12 +1,17 @@
 <resources>
-    <!-- Login fragment -->
+    <!-- Global -->
     <string name="app_name" translatable="false">WanderShots</string>
+    <string name="error_toast_text">Something went wrong</string>
+    <string name="fill_this_field">Please fill this field</string>
+
+    <!-- Login fragment -->
     <string name="welcome_to_wandershot">Welcome to WanderShot</string>
     <string name="username_label">Username</string>
     <string name="password_label">Password</string>
     <string name="login">Login</string>
     <string name="sign_in">Sign In</string>
-  
+    <string name="invalid_credentials_toast">Invalid credentials</string>
+
     <!-- Sign in fragment -->
     <string name="please_register">"Please register"</string>
     <string name="save">Save</string>

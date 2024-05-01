@@ -49,7 +49,7 @@ public class UserRepository {
     public User getUser(int userId) throws SQLException {
 
         try (Connection connection = ExternalSQLConnection.createConnection()) {
-            PreparedStatement query = connection.prepareStatement("SELECT userId, username FROM users WHERE id = ?");
+            PreparedStatement query = connection.prepareStatement("SELECT userId, username FROM user WHERE id = ?");
             query.setInt(1, userId);
             return getUserFromResult(query.executeQuery());
         }
@@ -62,7 +62,7 @@ public class UserRepository {
     public User getUser(String username) throws SQLException {
 
         try (Connection connection = ExternalSQLConnection.createConnection()) {
-            PreparedStatement query = connection.prepareStatement("SELECT userId, username FROM users WHERE username = ?");
+            PreparedStatement query = connection.prepareStatement("SELECT userId, username FROM user WHERE username = ?");
             query.setString(1, username);
             return getUserFromResult(query.executeQuery());
         }
@@ -75,7 +75,7 @@ public class UserRepository {
     public User getUser(String username, String password) throws SQLException {
 
         try (Connection connection = ExternalSQLConnection.createConnection()) {
-            PreparedStatement query = connection.prepareStatement("SELECT userId, username FROM users WHERE username = ? AND password = ?");
+            PreparedStatement query = connection.prepareStatement("SELECT userId, username FROM user WHERE username = ? AND password = ?");
             query.setString(1, username);
             query.setString(2, password);
             return getUserFromResult(query.executeQuery());
@@ -96,7 +96,7 @@ public class UserRepository {
                 return false;
             }
 
-            PreparedStatement query = connection.prepareStatement("INSERT INTO users (username, password) VALUES (?, ?)");
+            PreparedStatement query = connection.prepareStatement("INSERT INTO user (username, password) VALUES (?, ?)");
             query.setString(1, user.getUsername());
             query.setString(2, user.getPassword());
             query.executeUpdate();
