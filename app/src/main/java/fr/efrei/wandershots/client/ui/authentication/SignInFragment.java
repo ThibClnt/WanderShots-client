@@ -1,8 +1,5 @@
 package fr.efrei.wandershots.client.ui.authentication;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
