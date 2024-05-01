@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Global -->
+    <string name="error_toast_text">Une erreur s\'est produite</string>
+    <string name="fill_this_field">Merci de remplir ce champ</string>
+
     <!-- Login fragment -->
     <string name="welcome_to_wandershot">Bienvenue sur WanderShot</string>
     <string name="username_label">Nom d\'utilisateur</string>
     <string name="password_label">Mot de passe</string>
     <string name="login">Se connecter</string>
     <string name="sign_in">S\'enregistrer</string>
+    <string name="invalid_credentials_toast">Identifiants invalides</string>
   
     <!-- Sign in fragment -->
     <string name="please_register">Veuillez vous enregistrer</string>
