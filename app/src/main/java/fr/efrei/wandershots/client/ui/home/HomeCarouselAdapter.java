@@ -10,13 +10,12 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import java.util.List;
 
 import fr.efrei.wandershots.client.R;
-import fr.efrei.wandershots.client.data.Place;
+import fr.efrei.wandershots.client.entities.Place;
 
 public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapter.HomeCarouselViewHolder> {
 
