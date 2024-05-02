@@ -40,6 +40,7 @@
     <string name="pace">Pace</string>
     <string name="walk_label">Name</string>
     <string name="save_walk_name">Save</string>
+    <string name="position_marker">My position</string>
 
     <!-- Picture fragment -->
     <string name="take_picture_button">Take a picture</string>

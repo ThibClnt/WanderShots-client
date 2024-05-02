@@ -40,6 +40,7 @@
     <string name="pace">Rythme</string>
     <string name="walk_label">Nom</string>
     <string name="save_walk_name">Entrer</string>
+    <string name="position_marker">Ma position</string>
 
     <!-- Picture fragment -->
     <string name="take_picture_button">Prendre une photo</string>

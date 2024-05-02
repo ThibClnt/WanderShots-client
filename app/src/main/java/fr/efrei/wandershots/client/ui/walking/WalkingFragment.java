@@ -11,8 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -66,7 +64,6 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         // Request location permissions if necessary
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(requireContext(), "Nous avons besoin de vos permissions", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MainActivity.LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             displayMyCurrentLocation();
@@ -87,27 +84,24 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         if (lastKnownLocation != null) {
-            // Create a LatLng object with the last known location
-            LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            // Add a marker to the map with the user location
-            mMap.addMarker(new MarkerOptions().position(userLocation).title("Ma position"));
-            // Move the camera to the user location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f));
+            updateMarker(lastKnownLocation);
         }
 
-        LocationListener locationListener = location -> {
-            // When the location changes, update the marker and move the camera
-            LatLng updatedUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            // Clear previous markers
-            mMap.clear();
-            // Add a new marker
-            mMap.addMarker(new MarkerOptions().position(updatedUserLocation).title("Ma position"));
-            // Move the camera to the updated user location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(updatedUserLocation, 15f));
-        };
+        LocationListener locationListener = this::updateMarker;
 
         // Register the location listener with the location manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5, locationListener);
+    }
+
+    private void updateMarker(Location location) {
+        // When the location changes, update the marker and move the camera
+        LatLng updatedUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        // Clear previous markers
+        mMap.clear();
+        // Add a new marker
+        mMap.addMarker(new MarkerOptions().position(updatedUserLocation).title(getString(R.string.position_marker)));
+        // Move the camera to the updated user location
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(updatedUserLocation, 15f));
     }
     //endregion
 
