@@ -108,6 +108,9 @@ public class CredentialsManager {
         return new User(userId, username, password);
     }
 
+    /**
+     * This function adds a new user to the database
+     */
     public boolean signIn(String username, String password) throws CredentialsManagmentException {
         try {
             String hashedPassword = hashPassword(password);
@@ -116,6 +119,17 @@ public class CredentialsManager {
         } catch (SQLException e) {
             throw new CredentialsManagmentException("Error while creating user", e);
         }
+    }
+
+    /**
+     * This function removes the credentials from cache in order to force the user to login again
+     */
+    public void signOut() {
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.remove(KEY_USERID);
+        editor.remove(KEY_USERNAME);
+        editor.remove(KEY_PASSWORD);
+        editor.apply();
     }
 
     /**
