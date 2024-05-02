@@ -1,5 +1,6 @@
 package fr.efrei.wandershots.client.ui.picture;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentPictureBinding;
+import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 
 public class PictureFragment extends Fragment {
     private static final String TAG = PictureFragment.class.getSimpleName();
@@ -59,17 +61,25 @@ public class PictureFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        // Launch the camera and display the picture
         imageView = binding.pictureImageView;
-
         takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK) {
                 Glide.with(this).load(currentPhotoPath).into(imageView);
             }
         });
 
+        // Setup buttons
         binding.takePictureButton.setOnClickListener(v -> dispatchTakePictureIntent());
-
         binding.savePictureButton.setOnClickListener(v -> savePicture());
+
+        // Setup the back navigation
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                navigateToWalkFragment();
+            }
+        });
     }
 
     private Uri createImageFile() throws IOException {
@@ -137,5 +147,12 @@ public class PictureFragment extends Fragment {
 
     private void savePicture() {
         // TODO : save picture in the walk
+    }
+
+    private void navigateToWalkFragment() {
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, WalkingFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
     }
 }

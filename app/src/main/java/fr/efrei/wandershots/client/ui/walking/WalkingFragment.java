@@ -10,9 +10,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -27,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentWalkingBinding;
+import fr.efrei.wandershots.client.ui.picture.PictureFragment;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 
 public class WalkingFragment extends Fragment implements OnMapReadyCallback {
@@ -53,8 +51,10 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         mMapView.getMapAsync(this);
 
         // Setup the stop walk button
-        Button stopWalk = binding.stopWalk;
-        stopWalk.setOnClickListener(v -> onStopWalk());
+        binding.stopWalk.setOnClickListener(v -> onStopWalk());
+
+        // Setup the take picture button
+        binding.takePicture.setOnClickListener(v -> navigateToPictureFragment());
     }
 
     //region Map lifecycle
@@ -66,7 +66,6 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         // Request location permissions if necessary
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(requireContext(), "Nous avons besoin de vos permissions", Toast.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MainActivity.LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             displayMyCurrentLocation();
@@ -87,27 +86,24 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
         if (lastKnownLocation != null) {
-            // Create a LatLng object with the last known location
-            LatLng userLocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-            // Add a marker to the map with the user location
-            mMap.addMarker(new MarkerOptions().position(userLocation).title("Ma position"));
-            // Move the camera to the user location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f));
+            updateMarker(lastKnownLocation);
         }
 
-        LocationListener locationListener = location -> {
-            // When the location changes, update the marker and move the camera
-            LatLng updatedUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
-            // Clear previous markers
-            mMap.clear();
-            // Add a new marker
-            mMap.addMarker(new MarkerOptions().position(updatedUserLocation).title("Ma position"));
-            // Move the camera to the updated user location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(updatedUserLocation, 15f));
-        };
+        LocationListener locationListener = this::updateMarker;
 
         // Register the location listener with the location manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 5, locationListener);
+    }
+
+    private void updateMarker(Location location) {
+        // When the location changes, update the marker and move the camera
+        LatLng updatedUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        // Clear previous markers
+        mMap.clear();
+        // Add a new marker
+        mMap.addMarker(new MarkerOptions().position(updatedUserLocation).title(getString(R.string.position_marker)));
+        // Move the camera to the updated user location
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(updatedUserLocation, 15f));
     }
     //endregion
 
@@ -123,6 +119,14 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
 
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, homeFragment)
+                .commit();
+    }
+
+    public void navigateToPictureFragment() {
+        PictureFragment pictureFragment = PictureFragment.newInstance();
+
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, pictureFragment)
                 .commit();
     }
 }
