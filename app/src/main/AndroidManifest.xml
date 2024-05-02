@@ -2,7 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Internet permission : for database access -->
     <uses-permission android:name="android.permission.INTERNET" />
+  
+    <!-- Location permissions -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <!-- Camera access -->
     <uses-feature android:name="android.hardware.camera" />
@@ -23,6 +28,11 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.WanderShots"
             tools:targetApi="31">
+
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="PUT_YOUR_KEY_HERE"/>
 
         <!-- File provider for saving pictures in public internal storage -->
         <provider

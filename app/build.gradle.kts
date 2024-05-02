@@ -35,6 +35,9 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 
     implementation(libs.appcompat)
     implementation(libs.material)
@@ -45,12 +48,12 @@ dependencies {
     implementation(libs.legacy.support.v4)
     implementation(libs.annotation)
     implementation(libs.recyclerview)
+
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-
     implementation(libs.mysql.connector.java)
+    
+    implementation(libs.play.services.maps)
+    implementation (libs.play.services.location)
 }

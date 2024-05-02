@@ -1,6 +1,5 @@
 package fr.efrei.wandershots.client.ui.authentication;
 
-import fr.efrei.wandershots.client.data.CredentialsManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,8 @@ import com.mysql.jdbc.StringUtils;
 
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentAuthenticationBinding;
+
+import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.exceptions.CredentialsManagmentException;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 
@@ -76,7 +77,6 @@ public class AuthenticationFragment extends Fragment {
                 !validateField(binding.passwordInput, fillThisFieldError)) {
             return;
         }
-
 
         Editable usernameEditable = binding.loginInput.getText();
         Editable passwordEditable = binding.passwordInput.getText();

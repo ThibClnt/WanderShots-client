@@ -30,9 +30,20 @@
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Historique des marches</string>
 
+    <!-- Walk fragment -->
+    <string name="stop">Arrêter</string>
+    <string name="take_picture">Prendre une photo</string>
+    <string name="traveled">Parcouru</string>
+    <string name="started_at">Début</string>
+    <string name="lasted">Durée</string>
+    <string name="pace">Rythme</string>
+    <string name="walk_label">Nom</string>
+    <string name="save_walk_name">Entrer</string>
+
     <!-- Picture fragment -->
     <string name="take_picture_button">Prendre une photo</string>
     <string name="picture_title_input">Titre</string>
     <string name="save_picture_button">Sauvegarder l\'image</string>
     <string name="error_create_picture">Erreur lors de la création du fichier pour la photo</string>
+
 </resources>

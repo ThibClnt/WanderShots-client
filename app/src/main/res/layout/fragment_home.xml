@@ -155,13 +155,15 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
         <Button
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                app:cornerRadius="10dp"
-                android:text="@string/start_walk_button"
-                android:backgroundTint="@color/primary"
-                android:layout_gravity="center_vertical" />
+
+            android:id="@+id/start_walk"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="4"
+            android:backgroundTint="@color/primary"
+            android:text="@string/start_walk_button"
+            app:cornerRadius="10dp" />
     </LinearLayout>
 
 </LinearLayout>
