@@ -2,6 +2,7 @@ package fr.efrei.wandershots.client.ui.tabs;
 
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
@@ -14,7 +15,9 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 import fr.efrei.wandershots.client.R;
+import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.databinding.FragmentTabbedBinding;
+import fr.efrei.wandershots.client.ui.authentication.AuthenticationFragment;
 
 
 public class TabbedFragment extends Fragment {
@@ -37,6 +40,7 @@ public class TabbedFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        // Setup the tabs
         TabLayout tabLayout = binding.tabLayout;
         ViewPager2 tabsPager = binding.tabsPager;
 
@@ -46,5 +50,22 @@ public class TabbedFragment extends Fragment {
             tab.setText(TAB_TITLES[position]);
             tab.setIcon(TAB_ICONS[position]);
         }).attach();
+
+        // Handle back navigation
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                CredentialsManager.getInstance(getContext()).signOut();
+                navigateToLoginFragment();
+            }
+        });
+    }
+
+    private void navigateToLoginFragment() {
+        AuthenticationFragment loginFragment = AuthenticationFragment.newInstance();
+
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.container, loginFragment)
+                .commitNow();
     }
 }
