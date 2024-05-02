@@ -2,6 +2,7 @@
 <resources>
     <!-- Global -->
     <string name="error_toast_text">Une erreur s\'est produite</string>
+    <string name="perm_needed_toast_text">Permissions recquises</string>
     <string name="fill_this_field">Merci de remplir ce champ</string>
 
     <!-- Login fragment -->

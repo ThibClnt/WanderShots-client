@@ -2,6 +2,7 @@
     <!-- Global -->
     <string name="app_name" translatable="false">WanderShots</string>
     <string name="error_toast_text">Something went wrong</string>
+    <string name="perm_needed_toast_text">Permissions required</string>
     <string name="fill_this_field">Please fill this field</string>
 
     <!-- Login fragment -->

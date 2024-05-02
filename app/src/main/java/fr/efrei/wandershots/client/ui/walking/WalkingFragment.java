@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentWalkingBinding;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
@@ -32,8 +33,6 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private FragmentWalkingBinding binding;
-
-    public static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     public static WalkingFragment newInstance() {
         return new WalkingFragment();
@@ -68,7 +67,7 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(requireContext(), "Nous avons besoin de vos permissions", Toast.LENGTH_SHORT).show();
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MainActivity.LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             displayMyCurrentLocation();
         }
