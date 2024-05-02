@@ -1,4 +1,4 @@
-package fr.efrei.wandershots.client.data;
+package fr.efrei.wandershots.client.entities;
 
 public class Place {
 

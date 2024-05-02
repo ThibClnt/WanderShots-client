@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 import java.util.Arrays;
 import java.util.List;
 
-import fr.efrei.wandershots.client.data.Place;
+import fr.efrei.wandershots.client.entities.Place;
 
 public class HomeViewModel extends ViewModel {
 

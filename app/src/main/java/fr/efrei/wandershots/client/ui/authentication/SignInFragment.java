@@ -1,97 +1,108 @@
 package fr.efrei.wandershots.client.ui.authentication;
 
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Handler;
+import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.mysql.jdbc.StringUtils;
 
 import fr.efrei.wandershots.client.R;
-import fr.efrei.wandershots.client.data.CredentialManager;
+import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.databinding.FragmentSignInBinding;
+import fr.efrei.wandershots.client.exceptions.CredentialsManagmentException;
 
 
 public class SignInFragment extends Fragment {
+
+    private static final String TAG = SignInFragment.class.getSimpleName();
+
     private FragmentSignInBinding binding;
+    private CredentialsManager credentialsManager;
+    private Handler handler;
+
 
     public static SignInFragment newInstance() {
         return new SignInFragment();
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        this.binding = FragmentSignInBinding.inflate(inflater, container, false);
+        this.credentialsManager = CredentialsManager.getInstance(getContext());
+        this.handler = new Handler();
+        return this.binding.getRoot();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        binding = FragmentSignInBinding.inflate(inflater, container, false);
-
-        TextInputEditText usernameEditText = binding.signInInput;
-        TextInputEditText passwordEditText = binding.passwordInput;
-        TextInputEditText passwordConfirmEditText = binding.passwordConfirmInput;
-        Button saveButton = binding.buttonSave;
-
-        saveButton.setOnClickListener(v -> {
-            String username = usernameEditText.getText().toString();
-            String password = passwordEditText.getText().toString();
-            String confirmPassword = passwordConfirmEditText.getText().toString();
-
-            performSignIn(username, password,confirmPassword);
-        });
-
-        return binding.getRoot();
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        binding.buttonSave.setOnClickListener(v -> onSignInButtonClicked());
     }
-    private void performSignIn(String username, String password, String confirmPassword) {
 
-        // Validate username, password, and confirm password
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(confirmPassword)) {
-            // Display an error message or handle invalid credentials scenario
-            Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+    private void onSignInButtonClicked() {
+        // Check if the fields are empty
+        String fillThisFieldError = getString(R.string.fill_this_field);
+        if (!validateField(binding.signInInput, fillThisFieldError) ||
+            !validateField(binding.passwordInput, fillThisFieldError) ||
+            !validateField(binding.passwordConfirmInput, fillThisFieldError)) {
             return;
         }
 
-        if (!password.equals(confirmPassword)) {
-            // Display an error message or handle password mismatch scenario
-            Toast.makeText(getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+        Editable usernameEditable = binding.signInInput.getText();
+        Editable passwordEditable = binding.passwordInput.getText();
+        Editable repeatPasswordEditable = binding.passwordConfirmInput.getText();
+
+        // Check if the passwords match
+        if (!passwordEditable.toString().equals(repeatPasswordEditable.toString())) {
+            binding.passwordInput.setError("Passwords do not match");
+            binding.passwordConfirmInput.setError("Passwords do not match");
             return;
         }
 
-        if (CredentialManager.saveCredentials(getContext(), username, password)) {
-            Toast.makeText(getContext(), "Compte créé avec succès", Toast.LENGTH_SHORT).show();
-            navigateToLoginFragment();
-
-        } else {
-            Toast.makeText(getContext(), "Échec de la création du compte", Toast.LENGTH_SHORT).show();
-        }
-
-
+        // Sign in the user
+        new Thread(() -> {
+            try {
+                if (credentialsManager.signIn(usernameEditable.toString(), passwordEditable.toString())) {
+                    handler.post(this::navigateToLoginFragment);
+                } else {
+                    handler.post(() -> {
+                        usernameEditable.clear();
+                        passwordEditable.clear();
+                        repeatPasswordEditable.clear();
+                        Toast.makeText(getContext(), R.string.invalid_credentials_toast, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            } catch (CredentialsManagmentException e) {
+                Log.e(TAG, e.getMessage(), e);
+                handler.post(() -> Toast.makeText(getContext(), R.string.error_toast_text, Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
+
+    private boolean validateField(TextInputEditText field, String errorMessage) {
+        if (field.getText() == null || StringUtils.isNullOrEmpty(field.getText().toString())) {
+            field.setError(errorMessage);
+            return false;
+        }
+        return true;
+    }
+
     private void navigateToLoginFragment() {
         AuthenticationFragment authenticationFragment = new AuthenticationFragment();
 
-        // Get the FragmentManager
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
-        // Start a new FragmentTransaction
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        // Replace the current fragment with the new one
-        transaction.replace(R.id.container, authenticationFragment);
-
-        // Commit the transaction
-        transaction.commit();
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, authenticationFragment)
+                .commit();
     }
-
 }
