@@ -1,19 +1,15 @@
 package fr.efrei.wandershots.client.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.carousel.CarouselLayoutManager;
@@ -21,8 +17,6 @@ import com.google.android.material.carousel.HeroCarouselStrategy;
 
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentHomeBinding;
-import fr.efrei.wandershots.client.ui.authentication.AuthenticationFragment;
-import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 
 
@@ -40,39 +34,26 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        return binding.getRoot();
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        // Setup the carousel
         HomeCarouselAdapter adapter = new HomeCarouselAdapter(homeViewModel.getTrendingPlaces(), Glide.with(this));
         binding.carouselRecyclerView.setAdapter(adapter);
         binding.carouselRecyclerView.setLayoutManager(new CarouselLayoutManager(new HeroCarouselStrategy()));
 
-        Button startButton = binding.startWalk;
-        // Ajouter un écouteur de clic au bouton startWalk
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Appeler la méthode pour afficher le fragment WalkingFragment
-                navigateWalkingFragment();
-            }
-        });
-        return binding.getRoot();
+        // Setup the buttons
+        binding.startWalk.setOnClickListener(v -> navigateToWalkFragment());
     }
-    private void navigateWalkingFragment() {
+
+    private void navigateToWalkFragment() {
         WalkingFragment walkingFragment = WalkingFragment.newInstance();
 
-        // Get the FragmentManager
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
-        // Start a new FragmentTransaction
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        // Replace the current fragment with the new one
-        transaction.replace(R.id.container, walkingFragment);
-
-        // Commit the transaction
-        transaction.commit();
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, walkingFragment)
+                .commit();
     }
-
-
 }

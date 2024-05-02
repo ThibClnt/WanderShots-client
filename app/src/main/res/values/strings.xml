@@ -29,16 +29,16 @@
   
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Walks history</string>
-    <string name="stop">stop</string>
-    <string name="take_picture">take picture</string>
+
+    <!-- Walk fragment -->
+    <string name="stop">Stop</string>
+    <string name="take_picture">Take a picture</string>
     <string name="traveled">Traveled</string>
     <string name="started_at">Start</string>
     <string name="lasted">Lasted</string>
     <string name="pace">Pace</string>
-    <string name="walk_label">Walk Label</string>
+    <string name="walk_label">Name</string>
     <string name="save_walk_name">Save</string>
-
-
 
     <!-- Picture fragment -->
     <string name="take_picture_button">Take a picture</string>

@@ -18,8 +18,11 @@ import fr.efrei.wandershots.client.databinding.FragmentTabbedBinding;
 
 
 public class TabbedFragment extends Fragment {
+
     private static final int[] TAB_TITLES = new int[]{R.string.home_tab, R.string.walks_history_tab};
     private static final int[] TAB_ICONS = new int[]{R.drawable.round_home_24, R.drawable.round_access_time_filled_24};
+
+    private FragmentTabbedBinding binding;
 
     public static TabbedFragment newInstance() {
         return new TabbedFragment();
@@ -28,16 +31,20 @@ public class TabbedFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        FragmentTabbedBinding binding = FragmentTabbedBinding.inflate(inflater, container, false);
+        binding = FragmentTabbedBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         TabLayout tabLayout = binding.tabLayout;
         ViewPager2 tabsPager = binding.tabsPager;
+
         tabsPager.setAdapter(new TabsPagerAdapter(getChildFragmentManager(), getLifecycle()));
 
         new TabLayoutMediator(tabLayout, tabsPager, (tab, position) -> {
             tab.setText(TAB_TITLES[position]);
             tab.setIcon(TAB_ICONS[position]);
         }).attach();
-
-        return binding.getRoot();
     }
 }
