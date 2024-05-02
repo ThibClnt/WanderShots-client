@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -25,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentWalkingBinding;
+import fr.efrei.wandershots.client.ui.picture.PictureFragment;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 
 public class WalkingFragment extends Fragment implements OnMapReadyCallback {
@@ -51,8 +51,10 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         mMapView.getMapAsync(this);
 
         // Setup the stop walk button
-        Button stopWalk = binding.stopWalk;
-        stopWalk.setOnClickListener(v -> onStopWalk());
+        binding.stopWalk.setOnClickListener(v -> onStopWalk());
+
+        // Setup the take picture button
+        binding.takePicture.setOnClickListener(v -> navigateToPictureFragment());
     }
 
     //region Map lifecycle
@@ -117,6 +119,14 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
 
         requireActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, homeFragment)
+                .commit();
+    }
+
+    public void navigateToPictureFragment() {
+        PictureFragment pictureFragment = PictureFragment.newInstance();
+
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, pictureFragment)
                 .commit();
     }
 }
