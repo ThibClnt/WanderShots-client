@@ -5,12 +5,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/auth_background"
+        android:background="@color/light"
         tools:context=".ui.authentication.AuthenticationFragment">
 
     <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
         <LinearLayout
                 android:layout_width="match_parent"
@@ -53,7 +54,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:paddingHorizontal="32dp"
-                    android:layout_marginTop="64dp">
+                    android:layout_marginTop="16dp">
 
 
                 <com.google.android.material.textfield.TextInputLayout
