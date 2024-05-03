@@ -96,7 +96,9 @@ public class PictureFragment extends Fragment {
                     storageDir
             );
             currentPhotoPath = image.getAbsolutePath();
-            return Uri.fromFile(image);
+            return FileProvider.getUriForFile(requireActivity(),
+                    "fr.efrei.wandershots.client.fileprovider",
+                    new File(currentPhotoPath));
 
         } else {
             ContentResolver resolver = requireActivity().getContentResolver();
@@ -126,11 +128,7 @@ public class PictureFragment extends Fragment {
                 Toast.makeText(requireContext(), R.string.error_create_picture, Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                photoURI = FileProvider.getUriForFile(requireActivity(),
-                        "fr.efrei.wandershots.client.fileprovider",
-                        new File(currentPhotoPath));
-            }
+
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             takePictureLauncher.launch(takePictureIntent);
         }
