@@ -1,6 +1,5 @@
 package fr.efrei.wandershots.client.ui.picture;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
@@ -18,16 +17,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -37,26 +31,16 @@ import java.io.IOException;
 import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentPictureBinding;
+import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 
-public class PictureFragment extends Fragment {
-    private static final String TAG = PictureFragment.class.getSimpleName();
-
-    private FragmentPictureBinding binding;
+public class PictureFragment extends WandershotsFragment<FragmentPictureBinding> {
     private ImageView imageView;
     private String currentPhotoPath;
     private ActivityResultLauncher<Intent> takePictureLauncher;
 
     public static PictureFragment newInstance() {
         return new PictureFragment();
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-
-        binding = FragmentPictureBinding.inflate(inflater, container, false);
-        return binding.getRoot();
     }
 
     @Override
@@ -72,14 +56,6 @@ public class PictureFragment extends Fragment {
         // Setup buttons
         binding.takePictureButton.setOnClickListener(v -> dispatchTakePictureIntent());
         binding.savePictureButton.setOnClickListener(v -> savePicture());
-
-        // Setup the back navigation
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                navigateToWalkFragment();
-            }
-        });
     }
 
     private Uri createImageFile() throws IOException {
@@ -124,8 +100,8 @@ public class PictureFragment extends Fragment {
             try {
                 photoURI = createImageFile();
             } catch (IOException ex) {
-                if (ex.getMessage() != null) Log.e(TAG, ex.getMessage());
-                Toast.makeText(requireContext(), R.string.error_create_picture, Toast.LENGTH_SHORT).show();
+                logError("Failed to create image file", ex);
+                showToastMessage(R.string.error_create_picture);
                 return;
             }
 
@@ -145,12 +121,7 @@ public class PictureFragment extends Fragment {
 
     private void savePicture() {
         // TODO : save picture in the walk
-    }
 
-    private void navigateToWalkFragment() {
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, WalkingFragment.newInstance())
-                .addToBackStack(null)
-                .commit();
+        navigateToFragment(WalkingFragment.newInstance(), false);
     }
 }

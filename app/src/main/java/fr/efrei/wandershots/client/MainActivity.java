@@ -3,7 +3,6 @@ package fr.efrei.wandershots.client;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,7 +11,9 @@ import androidx.fragment.app.Fragment;
 import java.util.function.IntPredicate;
 
 import fr.efrei.wandershots.client.databinding.ActivityMainBinding;
+import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.picture.PictureFragment;
+import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
                     if (isPermissionGranted.test(0)) {
                         ((WalkingFragment) fragment).displayMyCurrentLocation();
                     } else {
-                        ((WalkingFragment) fragment).navigateToHomeFragment();
+                        ((WalkingFragment) fragment).navigateToFragment(TabbedFragment.newInstance());
                         granted = false;
                     }
                 }
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!granted) {
-            Toast.makeText(this, R.string.perm_needed_toast_text, Toast.LENGTH_SHORT).show();
+            ((WandershotsFragment) fragment).showToastMessage(R.string.perm_needed_toast_text);
         }
     }
 }

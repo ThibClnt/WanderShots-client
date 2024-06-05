@@ -19,8 +19,7 @@ import fr.efrei.wandershots.client.entities.Place;
 
 public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapter.HomeCarouselViewHolder> {
 
-    private Context context;
-    private RequestManager glide;
+    private final RequestManager glide;
     private final List<Place> places;
 
     public HomeCarouselAdapter(List<Place> places, RequestManager glide) {
@@ -31,7 +30,7 @@ public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapte
     @NonNull
     @Override
     public HomeCarouselViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        this.context = parent.getContext();
+        Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.carousel_item, parent, false);
         return new HomeCarouselViewHolder(view);
     }

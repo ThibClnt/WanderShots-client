@@ -7,12 +7,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,23 +21,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentWalkingBinding;
+import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.picture.PictureFragment;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 
-public class WalkingFragment extends Fragment implements OnMapReadyCallback {
+public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding> implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private FragmentWalkingBinding binding;
 
     public static WalkingFragment newInstance() {
         return new WalkingFragment();
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentWalkingBinding.inflate(inflater, container, false);
-        return binding.getRoot();
     }
 
     @Override
@@ -54,7 +44,7 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         binding.stopWalk.setOnClickListener(v -> onStopWalk());
 
         // Setup the take picture button
-        binding.takePicture.setOnClickListener(v -> navigateToPictureFragment());
+        binding.takePicture.setOnClickListener(v -> navigateToFragment(PictureFragment.newInstance()));
     }
 
     //region Map lifecycle
@@ -111,22 +101,6 @@ public class WalkingFragment extends Fragment implements OnMapReadyCallback {
         // 1 - Save (todo)
 
         // 2 - Navigate to the home fragment
-        navigateToHomeFragment();
-    }
-
-    public void navigateToHomeFragment() {
-        TabbedFragment homeFragment = TabbedFragment.newInstance();
-
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, homeFragment)
-                .commit();
-    }
-
-    public void navigateToPictureFragment() {
-        PictureFragment pictureFragment = PictureFragment.newInstance();
-
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container, pictureFragment)
-                .commit();
+        navigateToFragment(TabbedFragment.newInstance(), false);
     }
 }

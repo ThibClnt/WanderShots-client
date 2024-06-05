@@ -4,12 +4,9 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -17,25 +14,17 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.databinding.FragmentTabbedBinding;
+import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.authentication.AuthenticationFragment;
 
 
-public class TabbedFragment extends Fragment {
+public class TabbedFragment extends WandershotsFragment<FragmentTabbedBinding> {
 
     private static final int[] TAB_TITLES = new int[]{R.string.home_tab, R.string.walks_history_tab};
     private static final int[] TAB_ICONS = new int[]{R.drawable.round_home_24, R.drawable.round_access_time_filled_24};
 
-    private FragmentTabbedBinding binding;
-
     public static TabbedFragment newInstance() {
         return new TabbedFragment();
-    }
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        binding = FragmentTabbedBinding.inflate(inflater, container, false);
-        return binding.getRoot();
     }
 
     @Override
@@ -56,16 +45,8 @@ public class TabbedFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 CredentialsManager.getInstance(getContext()).signOut();
-                navigateToLoginFragment();
+                navigateToFragment(AuthenticationFragment.newInstance(), false);
             }
         });
-    }
-
-    private void navigateToLoginFragment() {
-        AuthenticationFragment loginFragment = AuthenticationFragment.newInstance();
-
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.container, loginFragment)
-                .commitNow();
     }
 }
