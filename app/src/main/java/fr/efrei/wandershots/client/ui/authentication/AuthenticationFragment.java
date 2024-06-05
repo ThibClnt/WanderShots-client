@@ -67,11 +67,11 @@ public class AuthenticationFragment extends WandershotsFragment<FragmentAuthenti
             return;
         }
 
-        //Editable usernameEditable = binding.loginInput.getText();
-        //Editable passwordEditable = binding.passwordInput.getText();
+        Editable usernameEditable = binding.loginInput.getText();
+        Editable passwordEditable = binding.passwordInput.getText();
 
         // Authenticate the user
-        /*new Thread(() -> {
+        new Thread(() -> {
             try {
                 //noinspection ConstantConditions
                 if (credentialsManager.authenticate(usernameEditable.toString(), passwordEditable.toString())) {
@@ -83,8 +83,8 @@ public class AuthenticationFragment extends WandershotsFragment<FragmentAuthenti
                 logError("Failed to authenticate user", e);
                 showToastMessage(R.string.error_toast_text);
             }
-        }).start();*/
-        navigateToHomeFragment();
+        }).start();
+
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

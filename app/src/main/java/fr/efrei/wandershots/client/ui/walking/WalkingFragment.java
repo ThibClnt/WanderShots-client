@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
@@ -18,8 +19,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,7 +43,8 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     private long startTime;
     private float elapsedTimeBetweenLocations = 0; // in s
     private float deltaDistance = 0; // in m
-    private List<LatLng> pointsList = new ArrayList<>();
+
+    private PolylineOptions polylineOptions;
 
 
     public static WalkingFragment newInstance() {
@@ -56,14 +58,20 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
+        // Instantiate PolylineOptions
+
+        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions.color(Color.RED);
+        polylineOptions.width(10);
+
         // Setup the stop walk button
         binding.stopWalk.setOnClickListener(v -> onStopWalk());
 
         // Setup the take picture button
-        binding.takePicture.setOnClickListener(v -> navigateToPictureFragment());
+        binding.takePicture.setOnClickListener(v -> navigateToFragment(PictureFragment.newInstance()));
         // set up start time
-        handler.post(()->binding.startTime.setText(getCurrentTime()));
-
+        startTime = System.currentTimeMillis();
+        handler.post(()->binding.startTime.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date())));
     }
 
     //region Map lifecycle
@@ -94,10 +102,10 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
             return;
 
         // Retrieve the last known location
-        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        if (lastKnownLocation != null) {
-            handler.post(()->updateMarker(lastKnownLocation));
+        if (lastLocation != null) {
+            handler.post(this::updateMarker);
         }
 
         LocationListener locationListener = location -> {
@@ -106,12 +114,10 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
                 deltaDistance = lastLocation.distanceTo(location);
                 totalDistance += deltaDistance;
                 elapsedTimeBetweenLocations = (location.getTime() - lastLocation.getTime()) / 1000f;
-                handler.post(()->updateUI(location));
+                handler.post(this::updateUI);
             }
             lastLocation = location;
-            LatLng newPoint = new LatLng(location.getLatitude(), location.getLongitude());
-            pointsList.add(newPoint);
-            handler.post(this::drawRoute);
+            handler.post(this::updateMap);
 
         };
 
@@ -119,49 +125,41 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
     }
 
-    private String getCurrentTime() {
-        startTime = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        return sdf.format(new Date());
-    }
-    private void updateMarker(Location location) {
-        // When the location changes, update the marker and move the camera
-        LatLng updatedUserLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        // Clear previous markers
+    private void updateMap(){
         mMap.clear();
-        // Add a new marker
-        mMap.addMarker(new MarkerOptions().position(updatedUserLocation).title(getString(R.string.position_marker)));
-        // Move the camera to the updated user location
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(updatedUserLocation, 15f));
-
+        drawRoute();
+        updateMarker();
     }
+
     private void drawRoute() {
-        mMap.clear();
-
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.RED);
-        polylineOptions.width(10);
-        for (LatLng point : pointsList) {
-            polylineOptions.add(point);
-        }
-
+        polylineOptions.add(new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude()));
         Polyline polyline = mMap.addPolyline(polylineOptions);
+    }
+
+    private void updateMarker() {
+        LatLng lastPoint = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
+        // Add a new marker
+        mMap.addMarker(new MarkerOptions().position(lastPoint).title(getString(R.string.position_marker)));
+        // Move the camera to the updated user location
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastPoint, 15f));
 
     }
-    private void updateUI(Location location) {
+    private String getFormattedTime(long msTime) {
+        long hours = (msTime / 1000) / 3600;
+        long minutes = ((msTime / 1000) % 3600) / 60;
+        return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
+    }
+    private void updateUI() {
         // Update Traveled Distance
         binding.traveledDistance.setText(String.format(Locale.getDefault(), "%.2f km", totalDistance / 1000));
 
         // Calculate and Update Duration
-
         long elapsedTime = System.currentTimeMillis() - startTime;
-        long elapsedHours = (elapsedTime / 1000) / 3600;
-        long elapsedMinutes = ((elapsedTime / 1000) % 3600) / 60;
-        binding.duration.setText(String.format(Locale.getDefault(), "%02d:%02d", elapsedHours, elapsedMinutes));
+        binding.duration.setText(getFormattedTime(elapsedTime));
 
-        // Calculate and Update Pace
-        float pace = deltaDistance > 0 ? deltaDistance / elapsedTimeBetweenLocations : 0; // m/s
-        binding.pace.setText(String.format(Locale.getDefault(), "%.2f m/s", pace));
+        // Calculate and Update Speed
+        float speed = deltaDistance > 0 ? deltaDistance / elapsedTimeBetweenLocations : 0; // m/s
+        binding.speed.setText(String.format(Locale.getDefault(), "%.2f m/s", speed));
     }
 
     public void onStopWalk(){

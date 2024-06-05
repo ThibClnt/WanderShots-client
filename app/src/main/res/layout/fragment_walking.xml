@@ -176,11 +176,11 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/pace"
+                        android:text="@string/speed"
                         android:textColor="@color/secondary" />
 
                     <TextView
-                        android:id="@+id/pace"
+                        android:id="@+id/speed"
                         android:layout_weight="3"
                         android:layout_height="0dp"
                         android:layout_width="match_parent"
