@@ -82,6 +82,8 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
             deltaDistance = savedInstanceState.getDouble(DELTA_DISTANCE_KEY);
             totalDistance = savedInstanceState.getDouble(TOTAL_DISTANCE_KEY);
             lastLocation = savedInstanceState.getParcelable(LAST_LOCATION_KEY);
+        } else {
+            startTime = new Date();
         }
 
         // Setup the stop walk button
@@ -90,7 +92,6 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         // Setup the take picture button
         binding.takePicture.setOnClickListener(v -> navigateToFragment(PictureFragment.newInstance()));
         // set up start time
-        startTime = new Date();
         handler.post(()->binding.startTime.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime)));
 
         handler.post(updateUIRunnable);
@@ -143,7 +144,7 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
 
     private void updateMarker() {
         LatLng lastPoint = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        map.addMarker(new MarkerOptions().position(lastPoint).title(getString(R.string.position_marker)));
+        map.addMarker(new MarkerOptions().position(lastPoint).title(requireActivity().getString(R.string.position_marker)));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastPoint, 15f));
     }
 
