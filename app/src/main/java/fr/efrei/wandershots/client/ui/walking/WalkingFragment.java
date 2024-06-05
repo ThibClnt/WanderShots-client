@@ -23,9 +23,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import fr.efrei.wandershots.client.MainActivity;
@@ -37,7 +35,7 @@ import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 
 public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding> implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    private GoogleMap map;
     private Location lastLocation;
     private float totalDistance = 0;
     private long startTime;
@@ -59,8 +57,7 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         mMapView.getMapAsync(this);
 
         // Instantiate PolylineOptions
-
-        PolylineOptions polylineOptions = new PolylineOptions();
+        polylineOptions = new PolylineOptions();
         polylineOptions.color(Color.RED);
         polylineOptions.width(10);
 
@@ -72,14 +69,15 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         // set up start time
         startTime = System.currentTimeMillis();
         handler.post(()->binding.startTime.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date())));
+
+        handler.post(updateUIRunnable);
     }
 
     //region Map lifecycle
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.setBuildingsEnabled(true);
-
+        map = googleMap;
+        map.setBuildingsEnabled(true);
 
         // Request location permissions if necessary
         if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -88,12 +86,11 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         } else {
             displayMyCurrentLocation();
         }
-
     }
 
     @SuppressLint("MissingPermission")
     public void displayMyCurrentLocation() {
-        if (mMap == null)
+        if (map == null)
             return;
 
         LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
@@ -114,41 +111,49 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
                 deltaDistance = lastLocation.distanceTo(location);
                 totalDistance += deltaDistance;
                 elapsedTimeBetweenLocations = (location.getTime() - lastLocation.getTime()) / 1000f;
-                handler.post(this::updateUI);
             }
             lastLocation = location;
-            handler.post(this::updateMap);
 
+            handler.post(this::updateMap);
         };
 
         // Register the location listener with the location manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 1, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
     }
 
     private void updateMap(){
-        mMap.clear();
-        drawRoute();
+        map.clear();
         updateMarker();
+        drawRoute();
     }
 
     private void drawRoute() {
         polylineOptions.add(new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude()));
-        Polyline polyline = mMap.addPolyline(polylineOptions);
+        Polyline polyline = map.addPolyline(polylineOptions);
     }
 
     private void updateMarker() {
         LatLng lastPoint = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
         // Add a new marker
-        mMap.addMarker(new MarkerOptions().position(lastPoint).title(getString(R.string.position_marker)));
+        map.addMarker(new MarkerOptions().position(lastPoint).title(getString(R.string.position_marker)));
         // Move the camera to the updated user location
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastPoint, 15f));
-
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastPoint, 15f));
     }
+
     private String getFormattedTime(long msTime) {
         long hours = (msTime / 1000) / 3600;
         long minutes = ((msTime / 1000) % 3600) / 60;
         return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
     }
+
+    private final Runnable updateUIRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateUI();
+            handler.postDelayed(this, 1000);
+        }
+    };
+
     private void updateUI() {
         // Update Traveled Distance
         binding.traveledDistance.setText(String.format(Locale.getDefault(), "%.2f km", totalDistance / 1000));
@@ -158,8 +163,8 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         binding.duration.setText(getFormattedTime(elapsedTime));
 
         // Calculate and Update Speed
-        float speed = deltaDistance > 0 ? deltaDistance / elapsedTimeBetweenLocations : 0; // m/s
-        binding.speed.setText(String.format(Locale.getDefault(), "%.2f m/s", speed));
+        double speed = (deltaDistance > 0 ? deltaDistance / elapsedTimeBetweenLocations : 0) / 3.6; // km/h
+        binding.speed.setText(String.format(Locale.getDefault(), "%.2f km/h", speed));
     }
 
     public void onStopWalk(){
@@ -167,5 +172,11 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
 
         // 2 - Navigate to the home fragment
         navigateToFragment(TabbedFragment.newInstance(), false);
+    }
+
+    @Override
+    public void onPause() {
+        handler.removeCallbacksAndMessages(updateUIRunnable);
+        super.onPause();
     }
 }
