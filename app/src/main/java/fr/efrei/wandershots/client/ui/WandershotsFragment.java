@@ -79,4 +79,8 @@ public abstract class WandershotsFragment<T extends ViewBinding> extends Fragmen
     protected void logError(String message, Throwable e) {
         Log.e(TAG, message, e);
     }
+
+    protected void debug(String message) {
+        Log.d(TAG, message);
+    }
 }
