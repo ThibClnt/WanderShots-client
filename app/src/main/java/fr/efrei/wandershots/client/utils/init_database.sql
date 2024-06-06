@@ -20,6 +20,17 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `UNIQUE_USERNAME` (`username`)
 );
 
+--
+-- Structure de la table 'walk'
+DROP TABLE IF EXISTS `walk`;
+CREATE TABLE walk (
+    walk_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    start_time DATETIME NOT NULL,
+    duration BIGINT NOT NULL,
+    distance DOUBLE NOT NULL
+);
+
 -- Password = "password"
 INSERT INTO `user` (`userId`, `username`, `password`) VALUES
 (1, 'testUser', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');

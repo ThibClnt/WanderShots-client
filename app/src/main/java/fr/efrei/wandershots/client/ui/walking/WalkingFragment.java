@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -27,6 +28,8 @@ import java.util.Locale;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentWalkingBinding;
 import fr.efrei.wandershots.client.entities.Picture;
+import fr.efrei.wandershots.client.entities.Walk;
+import fr.efrei.wandershots.client.repositories.WalkRepository;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.picture.PictureFragment;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
@@ -181,12 +184,34 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         binding.speed.setText(String.format(Locale.getDefault(), "%.1f km/h", speed));
     }
 
-    public void onStopWalk(){
-        // 1 - Save (todo)
+    public void onStopWalk() {
+        // 1 - Calculate the duration
+        long elapsedTime = TimeUtils.getElapsedTime(startTime);
 
-        // 2 - Navigate to the home fragment
+        // 2 - Get the walk title
+        if (binding.walkNameInput.getText() != null) {
+            title = binding.walkNameInput.getText().toString();
+        }
+
+        // 3 - Create a new Walk object with the current data
+        Walk walk = new Walk();
+        walk.setTitle(title);
+        walk.setStartTime(startTime);
+        walk.setDuration(elapsedTime);
+        walk.setDistance(totalDistance);
+
+        // 4 - Save the walk using WalkRepository
+        WalkRepository walkRepository = WalkRepository.getInstance();
+        walkRepository.saveWalk(walk);
+
+        Toast.makeText(requireContext(), "you clicked on stop", Toast.LENGTH_SHORT).show();
+
+        // 6 - Navigate to the home fragment
         navigateToFragment(TabbedFragment.newInstance(), false);
+        Toast.makeText(requireContext(), "the end my friend", Toast.LENGTH_SHORT).show();
+
     }
+
 
     @Override
     public void onPause() {
