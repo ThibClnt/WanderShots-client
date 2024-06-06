@@ -1,38 +1,33 @@
 package fr.efrei.wandershots.client.ui.picture;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.io.IOException;
 
-import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentPictureBinding;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
+import fr.efrei.wandershots.client.utils.PermissionUtils;
 
 public class PictureFragment extends WandershotsFragment<FragmentPictureBinding> {
     private ImageView imageView;
@@ -111,12 +106,10 @@ public class PictureFragment extends WandershotsFragment<FragmentPictureBinding>
     }
 
     private void dispatchTakePictureIntent() {
-        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.CAMERA}, MainActivity.REQUEST_CAMERA_PERMISSION);
-        }
-        else {
+        if (PermissionUtils.hasCameraPermission(requireContext()))
             takePicture();
-        }
+        else
+            PermissionUtils.requestCameraPermission(requireActivity(), this::takePicture);
     }
 
     private void savePicture() {

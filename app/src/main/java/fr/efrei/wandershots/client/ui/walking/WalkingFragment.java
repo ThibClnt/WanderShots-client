@@ -2,7 +2,6 @@ package fr.efrei.wandershots.client.ui.walking;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,13 +26,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import fr.efrei.wandershots.client.MainActivity;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentWalkingBinding;
 import fr.efrei.wandershots.client.entities.Picture;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.picture.PictureFragment;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
+import fr.efrei.wandershots.client.utils.PermissionUtils;
 
 public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding> implements OnMapReadyCallback {
 
@@ -109,17 +107,15 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         map = googleMap;
         map.setBuildingsEnabled(true);
 
-        // Request location permissions if necessary
-        if (ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MainActivity.LOCATION_PERMISSION_REQUEST_CODE);
+        if (PermissionUtils.hasLocationPermission(requireContext())) {
+            startLocationTracking();
         } else {
-            displayMyCurrentLocation();
+            PermissionUtils.requestLocationPermission(requireActivity(), this::startLocationTracking);
         }
     }
 
     @SuppressLint("MissingPermission")
-    public void displayMyCurrentLocation() {
+    public void startLocationTracking() {
         LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
 
         // Retrieve the last known location
