@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +19,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +30,9 @@ import fr.efrei.wandershots.client.entities.Picture;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.picture.PictureFragment;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
+import fr.efrei.wandershots.client.utils.LocationUtils;
 import fr.efrei.wandershots.client.utils.PermissionUtils;
+import fr.efrei.wandershots.client.utils.TimeUtils;
 
 public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding> implements OnMapReadyCallback {
 
@@ -64,49 +64,34 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        // Restore state
+        if (savedInstanceState != null) {
+            restoreState(savedInstanceState);
+        } else {
+            startTime = new Date();
+
+            polylineOptions = new PolylineOptions();
+            polylineOptions.color(Color.RED);
+            polylineOptions.width(10);
+        }
+
+        // Setup the buttons
+        binding.stopWalk.setOnClickListener(v -> onStopWalk());
+        binding.takePicture.setOnClickListener(v -> navigateToFragment(PictureFragment.newInstance()));
+
         // Setup the map
         MapView mMapView = binding.mapView;
         mMapView.onCreate(savedInstanceState);
         mMapView.getMapAsync(this);
 
-        // Instantiate PolylineOptions
-        polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.RED);
-        polylineOptions.width(10);
-
-        // Restore state
-        if (savedInstanceState != null) {
-            pictures = (List<Picture>) savedInstanceState.getSerializable(PICTURES_LIST_KEY);
-            polylineOptions = savedInstanceState.getParcelable(POLYLINE_OPTIONS_KEY);
-            startTime = (Date) savedInstanceState.getSerializable(START_TIME_KEY);
-            elapsedTimeBetweenLocations = savedInstanceState.getDouble(ELAPSED_TIME_BETWEEN_LOCATIONS_KEY);
-            deltaDistance = savedInstanceState.getDouble(DELTA_DISTANCE_KEY);
-            totalDistance = savedInstanceState.getDouble(TOTAL_DISTANCE_KEY);
-            lastLocation = savedInstanceState.getParcelable(LAST_LOCATION_KEY);
-            title = savedInstanceState.getString(TITLE_TAG);
-
-            handler.post(() -> binding.walkNameInput.setText(title));
-        } else {
-            startTime = new Date();
-        }
-
-        // Setup the stop walk button
-        binding.stopWalk.setOnClickListener(v -> onStopWalk());
-
-        // Setup the take picture button
-        binding.takePicture.setOnClickListener(v -> navigateToFragment(PictureFragment.newInstance()));
-        // set up start time
-        handler.post(()->binding.startTime.setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(startTime)));
-
+        // Initialize the UI
+        handler.post(()->binding.startTime.setText(TimeUtils.formatTime(startTime)));
         handler.post(updateUIRunnable);
     }
 
-    //region Map lifecycle
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
-        map.setBuildingsEnabled(true);
-
         if (PermissionUtils.hasLocationPermission(requireContext())) {
             startLocationTracking();
         } else {
@@ -116,49 +101,63 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
 
     @SuppressLint("MissingPermission")
     public void startLocationTracking() {
+        map.setBuildingsEnabled(true);
+        map.setMyLocationEnabled(true);
+        map.setOnMyLocationButtonClickListener(() -> {
+            centerOnLocation();
+            return true;
+        });
+
         LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
 
-        // Retrieve the last known location
+        // Set initial location
         lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        handler.post(this::updateMap);
-
-        LocationListener locationListener = location -> {
-
-            if (lastLocation != null) {
-                deltaDistance = lastLocation.distanceTo(location);
-                totalDistance += deltaDistance;
-                elapsedTimeBetweenLocations = (location.getTime() - lastLocation.getTime()) / 1000f;
-            }
-
-            lastLocation = location;
-            handler.post(this::updateMap);
-        };
+        updateMap();
+        centerOnLocation();
 
         // Register the location listener with the location manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this::onUpdateLocation);
+    }
+
+    private void onUpdateLocation(Location location) {
+        if (lastLocation == null)
+            return;
+
+        deltaDistance = lastLocation.distanceTo(location);
+        totalDistance += deltaDistance;
+        elapsedTimeBetweenLocations = (location.getTime() - lastLocation.getTime()) / 1000f;
+        lastLocation = location;
+        updateMap();
+    }
+
+    private void centerOnLocation() {
+        handler.post(() -> {
+            LatLng lastPoint = LocationUtils.getPosition(lastLocation);
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastPoint, 15));
+        });
     }
 
     private void updateMap(){
-        map.clear();
-        updateMarker();
-        drawRoute();
+        handler.post(() -> {
+            map.clear();
+            updateMarker();
+            drawRoute();
+        });
     }
 
     private void updateMarker() {
-        LatLng lastPoint = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
-        map.addMarker(new MarkerOptions().position(lastPoint).title(requireActivity().getString(R.string.position_marker)));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(lastPoint, 15f));
+        LatLng lastPoint = LocationUtils.getPosition(lastLocation);
+
+        map.addMarker(
+                new MarkerOptions()
+                        .position(lastPoint)
+                        .title(requireActivity().getString(R.string.position_marker))
+        );
     }
 
     private void drawRoute() {
-        polylineOptions.add(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
+        polylineOptions.add(LocationUtils.getPosition(lastLocation));
         Polyline polyline = map.addPolyline(polylineOptions);
-    }
-
-    private String getFormattedTime(long msTime) {
-        long hours = (msTime / 1000) / 3600;
-        long minutes = ((msTime / 1000) % 3600) / 60;
-        return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
     }
 
     private final Runnable updateUIRunnable = new Runnable() {
@@ -174,8 +173,8 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         binding.traveledDistance.setText(String.format(Locale.getDefault(), "%.2f km", totalDistance / 1000));
 
         // Calculate and Update Duration
-        long elapsedTime = System.currentTimeMillis() - startTime.getTime();
-        binding.duration.setText(getFormattedTime(elapsedTime));
+        long elapsedTime = TimeUtils.getElapsedTime(startTime);
+        binding.duration.setText(TimeUtils.formatTime(elapsedTime));
 
         // Calculate and Update Speed
         double speed = (deltaDistance > 0 ? deltaDistance / elapsedTimeBetweenLocations : 0) / 3.6; // km/h
@@ -199,6 +198,19 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     public void onResume() {
         super.onResume();
         handler.post(updateUIRunnable);
+    }
+
+    public void restoreState(@NonNull Bundle savedInstanceState) {
+        pictures = (List<Picture>) savedInstanceState.getSerializable(PICTURES_LIST_KEY);
+        polylineOptions = savedInstanceState.getParcelable(POLYLINE_OPTIONS_KEY);
+        startTime = (Date) savedInstanceState.getSerializable(START_TIME_KEY);
+        elapsedTimeBetweenLocations = savedInstanceState.getDouble(ELAPSED_TIME_BETWEEN_LOCATIONS_KEY);
+        deltaDistance = savedInstanceState.getDouble(DELTA_DISTANCE_KEY);
+        totalDistance = savedInstanceState.getDouble(TOTAL_DISTANCE_KEY);
+        lastLocation = savedInstanceState.getParcelable(LAST_LOCATION_KEY);
+        title = savedInstanceState.getString(TITLE_TAG);
+
+        handler.post(() -> binding.walkNameInput.setText(title));
     }
 
     @Override
