@@ -97,8 +97,13 @@ public class WalkingViewModel extends ViewModel {
 
         long elapsedTime = TimeUtils.getElapsedTime(startTimeLiveData.getValue());
 
+        String title = titleLiveData.getValue();
+        if (title == null || title.isEmpty()) {
+            title = "Walk " + TimeUtils.formatDateTime(startTimeLiveData.getValue());
+        }
+
         Walk walk = new Walk();
-        walk.setTitle(titleLiveData.getValue());
+        walk.setTitle(title);
         walk.setStartTime(startTimeLiveData.getValue());
         walk.setDuration(elapsedTime);
         walk.setDistance(totalDistanceLiveData.getValue());

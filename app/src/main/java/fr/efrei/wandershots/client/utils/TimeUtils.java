@@ -22,4 +22,8 @@ public class TimeUtils {
         long minutes = ((timeMs / 1000) % 3600) / 60;
         return String.format(Locale.getDefault(), "%02d:%02d", hours, minutes);
     }
+
+    public static String formatDateTime(Date date) {
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(date);
+    }
 }

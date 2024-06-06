@@ -1,7 +1,6 @@
 package fr.efrei.wandershots.client.repositories;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,24 +21,25 @@ public class WalkRepository {
         }
         return instance;
     }
-    public void saveWalk(Walk walk) {
-        String insertSQL = "INSERT INTO walks (title, start_time, duration, distance) VALUES (?, ?, ?, ?)";
 
-        try(Connection connection = ExternalSQLConnection.createConnection()){
-        PreparedStatement query = connection.prepareStatement(insertSQL) ;
-        query.setString(1, walk.getTitle());
-        query.setTimestamp(2, new java.sql.Timestamp(walk.getStartTime().getTime()));
-        query.setLong(3, walk.getDuration());
-        query.setDouble(4, walk.getDistance());
-        query.executeUpdate();
+    public void saveWalk(Walk walk) {
+        String insertSQL = "INSERT INTO walk (title, start_time, duration, distance) VALUES (?, ?, ?, ?)";
+
+        try(Connection connection = ExternalSQLConnection.createConnection()) {
+            PreparedStatement query = connection.prepareStatement(insertSQL) ;
+            query.setString(1, walk.getTitle());
+            query.setTimestamp(2, new java.sql.Timestamp(walk.getStartTime().getTime()));
+            query.setLong(3, walk.getDuration());
+            query.setDouble(4, walk.getDistance());
+            query.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
+
     public List<Walk> getAllWalks() {
         List<Walk> walks = new ArrayList<>();
-        String querySQL = "SELECT * FROM walks";
+        String querySQL = "SELECT * FROM walk";
 
         try (Connection connection = ExternalSQLConnection.createConnection();
              PreparedStatement query = connection.prepareStatement(querySQL);
@@ -55,7 +55,7 @@ public class WalkRepository {
                 walks.add(walk);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         return walks;

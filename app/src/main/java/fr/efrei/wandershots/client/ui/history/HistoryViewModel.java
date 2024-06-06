@@ -1,5 +1,6 @@
 package fr.efrei.wandershots.client.ui.history;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
@@ -11,18 +12,19 @@ import fr.efrei.wandershots.client.repositories.WalkRepository;
 public class HistoryViewModel extends ViewModel {
 
     private final WalkRepository walkRepository;
-    private List<Walk> walks;
+
+    private final MutableLiveData<List<Walk>> walks = new MutableLiveData<>(new ArrayList<>());
+    public MutableLiveData<List<Walk>> getWalks() { return walks; }
 
     public HistoryViewModel() {
         walkRepository = WalkRepository.getInstance();
-        walks = new ArrayList<>();
         loadWalks();
     }
-    private void loadWalks() {
-        walks = walkRepository.getAllWalks();
-    }
-    public List<Walk> getWalks(){
-        return walks;
-    }
 
+    private void loadWalks() {
+        new Thread(() -> {
+            List<Walk> walksList = walkRepository.getAllWalks();
+            walks.postValue(walksList);
+        }).start();
+    }
 }
