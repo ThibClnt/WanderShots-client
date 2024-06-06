@@ -45,6 +45,7 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     private static final String DELTA_DISTANCE_KEY = "deltaDistance";
     private static final String TOTAL_DISTANCE_KEY = "totalDistance";
     private static final String LAST_LOCATION_KEY = "lastLocation";
+    private static final String TITLE_TAG = "title";
 
     private GoogleMap map;
     private PolylineOptions polylineOptions;
@@ -54,6 +55,8 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     private double elapsedTimeBetweenLocations = 0; // in s
     private double deltaDistance = 0; // in m
     private double totalDistance = 0;
+
+    private String title = "";
 
     private List<Picture> pictures = new ArrayList<>();
 
@@ -82,6 +85,9 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
             deltaDistance = savedInstanceState.getDouble(DELTA_DISTANCE_KEY);
             totalDistance = savedInstanceState.getDouble(TOTAL_DISTANCE_KEY);
             lastLocation = savedInstanceState.getParcelable(LAST_LOCATION_KEY);
+            title = savedInstanceState.getString(TITLE_TAG);
+
+            handler.post(() -> binding.walkNameInput.setText(title));
         } else {
             startTime = new Date();
         }
@@ -202,6 +208,9 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (binding.walkNameInput.getText() != null)
+            outState.putString(TITLE_TAG, binding.walkNameInput.getText().toString());
+
         outState.putSerializable(PICTURES_LIST_KEY, (ArrayList<Picture>) pictures);
         outState.putParcelable(POLYLINE_OPTIONS_KEY, polylineOptions);
         outState.putSerializable(START_TIME_KEY, startTime);
