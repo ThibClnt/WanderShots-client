@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewbinding.ViewBinding;
 
 import java.lang.reflect.Method;
@@ -69,6 +70,13 @@ public abstract class WandershotsFragment<T extends ViewBinding> extends Fragmen
             requireActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.container, fragment)
                     .commit();
+        }
+    }
+
+    public void popBackStack() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() != 0) {
+            fragmentManager.popBackStack();
         }
     }
 

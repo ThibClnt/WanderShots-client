@@ -9,16 +9,18 @@ public class Walk {
     private Date startTime;
     private long duration;
     private double distance;
+    private int userId;
 
     public Walk() {
     }
 
-    public Walk(int walkId, String title, Date startTime, long duration, double distance) {
+    public Walk(int walkId, String title, Date startTime, long duration, double distance, int userId) {
         this.walkId = walkId;
         this.title = title;
         this.startTime = startTime;
         this.duration = duration;
         this.distance = distance;
+        this.userId = userId;
     }
 
     public int getWalkId() {
@@ -59,5 +61,13 @@ public class Walk {
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

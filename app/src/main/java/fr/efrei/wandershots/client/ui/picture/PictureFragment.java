@@ -26,7 +26,6 @@ import java.io.IOException;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentPictureBinding;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
-import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 import fr.efrei.wandershots.client.utils.PermissionUtils;
 
 public class PictureFragment extends WandershotsFragment<FragmentPictureBinding> {
@@ -114,7 +113,6 @@ public class PictureFragment extends WandershotsFragment<FragmentPictureBinding>
 
     private void savePicture() {
         // TODO : save picture in the walk
-
-        navigateToFragment(WalkingFragment.newInstance(), false);
+        popBackStack();
     }
 }

@@ -1,5 +1,6 @@
 package fr.efrei.wandershots.client.ui.walking;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
 
@@ -13,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.entities.Picture;
+import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.entities.Walk;
 import fr.efrei.wandershots.client.repositories.WalkRepository;
 import fr.efrei.wandershots.client.utils.LocationUtils;
@@ -91,7 +94,7 @@ public class WalkingViewModel extends ViewModel {
         titleLiveData.setValue(title);
     }
 
-    public void stopWalk() {
+    public void stopWalk(Context context) {
         if (startTimeLiveData.getValue() == null || totalDistanceLiveData.getValue() == null)
             return;
 
@@ -102,11 +105,16 @@ public class WalkingViewModel extends ViewModel {
             title = "Walk " + TimeUtils.formatDateTime(startTimeLiveData.getValue());
         }
 
+        User user = CredentialsManager.getInstance(context).getCredentialsFromCache();
+
         Walk walk = new Walk();
         walk.setTitle(title);
         walk.setStartTime(startTimeLiveData.getValue());
         walk.setDuration(elapsedTime);
         walk.setDistance(totalDistanceLiveData.getValue());
+        if (user != null) {
+            walk.setUserId(user.getUserId());
+        }
 
         walkRepository.saveWalk(walk);
     }

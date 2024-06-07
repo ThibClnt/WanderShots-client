@@ -1,10 +1,9 @@
 package fr.efrei.wandershots.client.entities;
 
-import java.io.Serializable;
-
-public class Picture implements Serializable {
+public class Picture {
 
     private int pictureId;
+    private int walkId;
     private String title;
     private double latitude;
     private double longitude;
@@ -13,8 +12,9 @@ public class Picture implements Serializable {
     public Picture() {
     }
 
-    public Picture(int pictureId, String title, double latitude, double longitude, byte[] image) {
+    public Picture(int pictureId, int walkId, String title, double latitude, double longitude, byte[] image) {
         this.pictureId = pictureId;
+        this.walkId = walkId;
         this.title = title;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -27,6 +27,14 @@ public class Picture implements Serializable {
 
     public void setPictureId(int pictureId) {
         this.pictureId = pictureId;
+    }
+
+    public int getWalkId() {
+        return walkId;
+    }
+
+    public void setWalkId(int walkId) {
+        this.walkId = walkId;
     }
 
     public String getTitle() {
