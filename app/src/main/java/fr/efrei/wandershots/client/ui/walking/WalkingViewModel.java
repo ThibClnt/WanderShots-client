@@ -1,8 +1,11 @@
 package fr.efrei.wandershots.client.ui.walking;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -18,6 +21,7 @@ import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.entities.Picture;
 import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.entities.Walk;
+import fr.efrei.wandershots.client.repositories.PictureRepository;
 import fr.efrei.wandershots.client.repositories.WalkRepository;
 import fr.efrei.wandershots.client.utils.LocationUtils;
 import fr.efrei.wandershots.client.utils.TimeUtils;
@@ -46,12 +50,14 @@ public class WalkingViewModel extends ViewModel {
     public LiveData<Date> getStartTime() { return startTimeLiveData; }
 
     private final WalkRepository walkRepository;
+    private final PictureRepository pictureRepository;
     private final List<Picture> pictures = new ArrayList<>();
     private double deltaDistance;
     private double elapsedTimeBetweenLocations;
 
     public WalkingViewModel() {
         walkRepository = WalkRepository.getInstance();
+        pictureRepository = PictureRepository.getInstance();
         PolylineOptions polylineOptions = new PolylineOptions()
                 .color(Color.BLUE);
         polylineOptionsLiveData.setValue(polylineOptions);
@@ -93,7 +99,12 @@ public class WalkingViewModel extends ViewModel {
     public void setTitle(String title) {
         titleLiveData.setValue(title);
     }
-
+    public void addPicture(Picture picture) {
+        pictures.add(picture);
+    }
+    public List<Picture> getPictures() {
+        return new ArrayList<>(pictures);
+    }
     public void stopWalk(Context context) {
         if (startTimeLiveData.getValue() == null || totalDistanceLiveData.getValue() == null)
             return;
@@ -114,6 +125,13 @@ public class WalkingViewModel extends ViewModel {
         walk.setDistance(totalDistanceLiveData.getValue());
         if (user != null) {
             walk.setUserId(user.getUserId());
+        }
+        for (Picture picture : pictures) {
+            picture.setWalkId(walk.getWalkId());
+            Toast.makeText(context.getApplicationContext(), "appel au repo",Toast.LENGTH_SHORT ).show();
+            pictureRepository.savePicture(picture);
+            Toast.makeText(context.getApplicationContext(), "retour du repo",Toast.LENGTH_SHORT ).show();
+
         }
 
         walkRepository.saveWalk(walk);

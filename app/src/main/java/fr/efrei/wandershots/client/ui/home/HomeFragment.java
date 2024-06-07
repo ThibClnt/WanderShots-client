@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.android.material.carousel.HeroCarouselStrategy;
 
+import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentHomeBinding;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
@@ -40,6 +41,10 @@ public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
         HomeCarouselAdapter adapter = new HomeCarouselAdapter(homeViewModel.getTrendingPlaces(), Glide.with(this));
         binding.carouselRecyclerView.setAdapter(adapter);
         binding.carouselRecyclerView.setLayoutManager(new CarouselLayoutManager(new HeroCarouselStrategy()));
+
+        // TODO retreive user name
+        String updated_welcome_message = getString(R.string.welcome_message, "toto");
+        binding.welcomeMessage.setText(updated_welcome_message);
 
         // Setup the buttons
         binding.startWalk.setOnClickListener(v -> navigateToFragment(WalkingFragment.newInstance()));

@@ -16,88 +16,79 @@
             android:layout_weight="4"
             android:id="@+id/statsCardView"
             app:cardCornerRadius="15dp"
-            android:layout_margin="8dp"
-            >
+            android:layout_margin="8dp">
+
 
         <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingVertical="8dp"
-                android:paddingStart="24dp"
-                android:paddingEnd="32dp">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="2">
 
-            <TextView
-                    android:id="@+id/totalPointsTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/totalPoints"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textColor="@color/secondary" />
 
             <LinearLayout
-                    android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/welcomeMessage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="match_parent"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@color/secondary"
+                    android:padding ="10dp"
+                    android:gravity="center"
+                    android:text="@string/welcome_message" />
 
-                <TextView
-                        android:id="@+id/totalPointsValue"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="32dp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                        android:textColor="@color/black"
-                        android:textAlignment="viewEnd"
-                        android:layout_weight="4" />
-
-                <TextView
-                        android:id="@+id/totalPointsUnit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                        android:textColor="@color/black"
-                        android:textAlignment="viewStart"
-                        android:layout_weight="1"
-                        android:text="@string/pointUnit"
-                        android:layout_marginStart="8dp" />
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <TextView
+
+                <TextView
                     android:id="@+id/distanceTraveledTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:paddingLeft="20dp"
                     android:text="@string/distanceTraveled"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@color/secondary" />
 
-            <LinearLayout
+                <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                <TextView
+                    <TextView
                         android:id="@+id/distanceTraveledValue"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginBottom="32dp"
+                        android:gravity="center"
+                        android:layout_margin="10dp"
                         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                         android:textColor="@color/black"
-                        android:textAlignment="viewEnd"
-                        android:layout_weight="4" />
+                        android:layout_weight="2" />
 
-                <TextView
+                    <TextView
                         android:id="@+id/distanceTraveledUnit"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:layout_margin="10dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/black"
-                        android:textAlignment="viewStart"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
                         android:text="@string/distanceUnit" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -121,11 +112,11 @@
                 android:paddingEnd="32dp">
 
             <TextView
-                    android:id="@+id/trendingPlacesTitle"
+                    android:id="@+id/myPictures"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="@string/trendingPlacesTitle"
+                    android:text="@string/myPictures"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     android:textColor="@color/secondary" />
 

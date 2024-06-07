@@ -20,13 +20,13 @@
   
     <!-- Home fragment -->
     <string name="home_tab">Accueil</string>
-    <string name="totalPoints">Total Points</string>
-    <string name="distanceTraveled">Distance Parcourue</string>
+    <string name="distanceTraveled">Distance Totale Parcourue</string>
     <string name="pointUnit">pts</string>
     <string name="distanceUnit">km</string>
     <string name="engagment_label">Envie de flâner ?</string>
     <string name="start_walk_button">Commencer</string>
-    <string name="trendingPlacesTitle">Lieux tendances</string>
+    <string name="myPictures">Mes Photos de Marche</string>
+    <string name="welcome_message">Bienvenue %1$s ! Heureux de vous revoir parmi nous pour une splendide marche !</string>
   
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Historique des marches</string>
@@ -46,6 +46,10 @@
     <string name="picture_title_input">Titre</string>
     <string name="save_picture_button">Sauvegarder l\'image</string>
     <string name="error_create_picture">Erreur lors de la création du fichier pour la photo</string>
+    <string name="error_no_picture">Le chemin actuel de la photo est nul</string>
+    <string name="error_read_picture">Probleme à la lecture de l\'image</string>
+    <string name="picture_saved">Image enregistrée avec succès</string>
+
 
 
 </resources>

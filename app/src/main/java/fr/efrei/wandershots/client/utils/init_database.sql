@@ -42,8 +42,8 @@ CREATE TABLE picture (
     picture_id INT PRIMARY KEY AUTO_INCREMENT,
     walk_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
-    latitude DOUBLE NOT NULL,
-    longitude DOUBLE NOT NULL,
+    --latitude DOUBLE NOT NULL,
+    --longitude DOUBLE NOT NULL,
     image BLOB NOT NULL,
     FOREIGN KEY (walk_id) REFERENCES walk(walk_id)
 );

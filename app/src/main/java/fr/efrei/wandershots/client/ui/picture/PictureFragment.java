@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,21 +18,29 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.databinding.FragmentPictureBinding;
+import fr.efrei.wandershots.client.entities.Picture;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
+import fr.efrei.wandershots.client.ui.walking.WalkingViewModel;
 import fr.efrei.wandershots.client.utils.PermissionUtils;
+import fr.efrei.wandershots.client.utils.TimeUtils;
 
 public class PictureFragment extends WandershotsFragment<FragmentPictureBinding> {
     private ImageView imageView;
     private String currentPhotoPath;
     private ActivityResultLauncher<Intent> takePictureLauncher;
+    private WalkingViewModel walkingViewModel;
 
     public static PictureFragment newInstance() {
         return new PictureFragment();
@@ -41,6 +50,7 @@ public class PictureFragment extends WandershotsFragment<FragmentPictureBinding>
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         // Launch the camera and display the picture
         imageView = binding.pictureImageView;
+        walkingViewModel = new ViewModelProvider(requireActivity()).get(WalkingViewModel.class);
         takePictureLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == Activity.RESULT_OK) {
                 Glide.with(this).load(currentPhotoPath).into(imageView);
@@ -113,6 +123,54 @@ public class PictureFragment extends WandershotsFragment<FragmentPictureBinding>
 
     private void savePicture() {
         // TODO : save picture in the walk
+        if (currentPhotoPath == null) {
+            showToastMessage(R.string.error_no_picture);
+            return;
+        }
+
+        EditText titleInput = binding.pictureTitleInput;
+        String title;
+        if (titleInput.getText().toString().isEmpty()) {
+            title = "default_picture_title";
+        } else {
+            title = titleInput.getText().toString();
+        }
+
+        // Read image file as byte array
+        byte[] image = null;
+        try {
+            image = readFileAsByteArray(currentPhotoPath);
+        } catch (IOException e) {
+            logError("Failed to read image file", e);
+            showToastMessage(R.string.error_read_picture);
+            return;
+        }
+
+        // Create Picture entity and save it to ViewModel
+        Picture picture = new Picture();
+        // set only title and image
+        picture.setTitle(title);
+        picture.setImage(image);
+        // walkingViewModel will set idWalk
+        walkingViewModel.addPicture(picture);
+
+        showToastMessage(R.string.picture_saved);
+
+        // Clear the current photo path and title input
+        currentPhotoPath = null;
+        binding.pictureTitleInput.setText("");
         popBackStack();
+    }
+    private byte[] readFileAsByteArray(String filePath) throws IOException {
+        File file = new File(filePath);
+        try (InputStream inputStream = new FileInputStream(file);
+             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, length);
+            }
+            return byteArrayOutputStream.toByteArray();
+        }
     }
 }
