@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.efrei.wandershots.client.datasource.ExternalSQLConnection;
+import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.entities.Walk;
 
 public class WalkRepository {
@@ -23,7 +24,7 @@ public class WalkRepository {
     }
 
     public void saveWalk(Walk walk) {
-        String insertSQL = "INSERT INTO walk (title, start_time, duration, distance) VALUES (?, ?, ?, ?)";
+        String insertSQL = "INSERT INTO walk (title, start_time, duration, distance, userId) VALUES (?, ?, ?, ?, ?)";
 
         try(Connection connection = ExternalSQLConnection.createConnection()) {
             PreparedStatement query = connection.prepareStatement(insertSQL) ;
@@ -31,19 +32,21 @@ public class WalkRepository {
             query.setTimestamp(2, new java.sql.Timestamp(walk.getStartTime().getTime()));
             query.setLong(3, walk.getDuration());
             query.setDouble(4, walk.getDistance());
+            query.setInt(5, walk.getUserId());
             query.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<Walk> getAllWalks() {
+    public List<Walk> getAllUserWalks(User user) {
         List<Walk> walks = new ArrayList<>();
-        String querySQL = "SELECT * FROM walk";
+        String querySQL = "SELECT * FROM walk WHERE userId = ? ORDER BY start_time DESC";
 
-        try (Connection connection = ExternalSQLConnection.createConnection();
-             PreparedStatement query = connection.prepareStatement(querySQL);
-             ResultSet rs = query.executeQuery()) {
+        try (Connection connection = ExternalSQLConnection.createConnection()) {
+            PreparedStatement query = connection.prepareStatement(querySQL);
+            query.setInt(1, user.getUserId());
+            ResultSet rs = query.executeQuery();
 
             while (rs.next()) {
                 Walk walk = new Walk();
