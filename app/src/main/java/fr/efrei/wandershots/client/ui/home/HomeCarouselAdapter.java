@@ -15,16 +15,22 @@ import com.bumptech.glide.RequestManager;
 import java.util.List;
 
 import fr.efrei.wandershots.client.R;
-import fr.efrei.wandershots.client.entities.Place;
+import fr.efrei.wandershots.client.entities.Picture;
 
 public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapter.HomeCarouselViewHolder> {
 
     private final RequestManager glide;
-    private final List<Place> places;
+    private final List<Picture> pictures;
 
-    public HomeCarouselAdapter(List<Place> places, RequestManager glide) {
-        this.places = places;
+    public HomeCarouselAdapter(List<Picture> pictures, RequestManager glide) {
+        this.pictures = pictures;
         this.glide = glide;
+    }
+
+    public void setPictures(List<Picture> pictures) {
+        this.pictures.clear();
+        this.pictures.addAll(pictures);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -37,13 +43,13 @@ public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapte
 
     @Override
     public void onBindViewHolder(@NonNull HomeCarouselViewHolder holder, int position) {
-        Place place = places.get(position);
-        holder.updateImage(place.getImageUrl(), glide);
+        Picture picture = pictures.get(position);
+        holder.updateImage(picture.getImage(), glide);
     }
 
     @Override
     public int getItemCount() {
-        return places.size();
+        return pictures.size();
     }
 
     public static class HomeCarouselViewHolder extends RecyclerView.ViewHolder {
@@ -54,8 +60,8 @@ public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapte
             imageView = itemView.findViewById(R.id.carousel_image_view);
         }
 
-        public void updateImage(String imageUrl, RequestManager glide) {
-            glide.load(imageUrl).into(imageView);
+        public void updateImage(byte[] imageData, RequestManager glide) {
+            glide.load(imageData).into(imageView);
         }
     }
 }

@@ -23,8 +23,6 @@ import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
 
     private HomeViewModel homeViewModel;
-    private CredentialsManager credentialsManager;
-
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
@@ -32,15 +30,14 @@ public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        credentialsManager = CredentialsManager.getInstance(requireContext());
 
         // Setup the carousel
-        HomeCarouselAdapter adapter = new HomeCarouselAdapter(homeViewModel.getTrendingPlaces(), Glide.with(this));
+        HomeCarouselAdapter adapter = new HomeCarouselAdapter(homeViewModel.getPictures().getValue(), Glide.with(this));
         binding.carouselRecyclerView.setAdapter(adapter);
         binding.carouselRecyclerView.setLayoutManager(new CarouselLayoutManager(new HeroCarouselStrategy()));
 
         // Greeting message
-        User user = credentialsManager.getCredentialsFromCache();
+        User user = CredentialsManager.getInstance(requireContext()).getCredentialsFromCache();
         String username = "Anonymous";
 
         if (user != null) {
@@ -56,6 +53,11 @@ public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
         homeViewModel.getTotalDistance().observe(getViewLifecycleOwner(), totalDistance -> {
             String formattedDistance = String.format(Locale.getDefault(), "%.1f", totalDistance / 1000);
             binding.distanceTraveledValue.setText(formattedDistance);
+        });
+        homeViewModel.getPictures().observe(getViewLifecycleOwner(), pictures -> {
+            if (!pictures.isEmpty()) {
+                adapter.setPictures(pictures);
+            }
         });
     }
 }

@@ -139,21 +139,25 @@ public class WalkingViewModel extends ViewModel {
         int walkId = walkRepository.saveWalk(walk);
 
         if (picturesLiveData.getValue() != null) {
-            for (Picture picture : picturesLiveData.getValue()) {
+            ArrayList<Picture> pictures = picturesLiveData.getValue();
+            for (Picture picture : pictures) {
+                Log.d(this.getClass().getName(), picture.getTitle());
                 picture.setWalkId(walkId);
                 pictureRepository.savePicture(picture);
             }
         }
+
+        reset();
     }
 
     public void reset() {
-        polylineOptionsLiveData.setValue(new PolylineOptions().color(Color.BLUE));
-        lastLocationLiveData.setValue(null);
-        totalDistanceLiveData.setValue(0.0);
-        elapsedTimeLiveData.setValue(0L);
-        speedLiveData.setValue(0.0);
-        titleLiveData.setValue("");
-        startTimeLiveData.setValue(new Date());
-        picturesLiveData.setValue(new ArrayList<>());
+        polylineOptionsLiveData.postValue(new PolylineOptions().color(Color.BLUE));
+        lastLocationLiveData.postValue(null);
+        totalDistanceLiveData.postValue(0.0);
+        elapsedTimeLiveData.postValue(0L);
+        speedLiveData.postValue(0.0);
+        titleLiveData.postValue("");
+        startTimeLiveData.postValue(new Date());
+        picturesLiveData.postValue(new ArrayList<>());
     }
 }

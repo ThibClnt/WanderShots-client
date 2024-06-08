@@ -164,7 +164,6 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     public void onStopWalk() {
         new Thread(() -> viewModel.stopWalk(getContext())).start();
         navigateToFragment(TabbedFragment.newInstance(), false);
-        viewModel.reset();
     }
 
     @Override

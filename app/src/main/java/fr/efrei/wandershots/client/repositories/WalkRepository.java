@@ -17,6 +17,9 @@ public class WalkRepository {
     private static WalkRepository instance;
     private WalkRepository() {}
 
+    /**
+     * Get the singleton instance of the walk repository.
+     */
     public static synchronized WalkRepository getInstance() {
         if (instance == null) {
             instance = new WalkRepository();
@@ -24,6 +27,9 @@ public class WalkRepository {
         return instance;
     }
 
+    /**
+     * Save a walk in the database. Return the id of the walk.
+     */
     public int saveWalk(Walk walk) {
         String insertSQL = "INSERT INTO walk (title, start_time, duration, distance, userId) VALUES (?, ?, ?, ?, ?)";
 
@@ -47,6 +53,9 @@ public class WalkRepository {
         }
     }
 
+    /**
+     * Get all the walks of a user.
+     */
     public List<Walk> getAllUserWalks(User user) {
         List<Walk> walks = new ArrayList<>();
         String querySQL = "SELECT * FROM walk WHERE userId = ? ORDER BY start_time DESC";
@@ -71,5 +80,4 @@ public class WalkRepository {
 
         return walks;
     }
-
 }
