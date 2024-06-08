@@ -105,4 +105,22 @@ public class UserRepository {
     }
 
     //endregion
+
+    //region Get other users information
+
+    /**
+     * Get the total distance walked by a user, in meters.
+     */
+    public double getUserDistance(int userId) throws SQLException {
+        try (Connection connection = ExternalSQLConnection.createConnection()) {
+            PreparedStatement query = connection.prepareStatement("SELECT SUM(distance) FROM walk WHERE userId = ?");
+            query.setInt(1, userId);
+            ResultSet resultSet = query.executeQuery();
+            if (!resultSet.first()) {
+                return 0;
+            }
+            return resultSet.getDouble(1);
+        }
+    }
+    //endregion
 }

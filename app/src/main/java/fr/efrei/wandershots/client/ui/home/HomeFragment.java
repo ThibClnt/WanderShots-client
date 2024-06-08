@@ -1,18 +1,16 @@
 package fr.efrei.wandershots.client.ui.home;
 
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.android.material.carousel.HeroCarouselStrategy;
+
+import java.util.Locale;
 
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.data.CredentialsManager;
@@ -32,15 +30,10 @@ public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         credentialsManager = CredentialsManager.getInstance(requireContext());
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
 
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         // Setup the carousel
         HomeCarouselAdapter adapter = new HomeCarouselAdapter(homeViewModel.getTrendingPlaces(), Glide.with(this));
         binding.carouselRecyclerView.setAdapter(adapter);
@@ -59,5 +52,10 @@ public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
 
         // Setup the buttons
         binding.startWalk.setOnClickListener(v -> navigateToFragment(WalkingFragment.newInstance()));
+
+        homeViewModel.getTotalDistance().observe(getViewLifecycleOwner(), totalDistance -> {
+            String formattedDistance = String.format(Locale.getDefault(), "%.1f", totalDistance / 1000);
+            binding.distanceTraveledValue.setText(formattedDistance);
+        });
     }
 }
