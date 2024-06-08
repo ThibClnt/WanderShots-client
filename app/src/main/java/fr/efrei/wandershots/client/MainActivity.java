@@ -19,15 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = ActivityMainBinding.inflate(LayoutInflater.from(this));
         setContentView(binding.getRoot());
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                if(fragmentManager.getBackStackEntryCount() != 0) {
-                    fragmentManager.popBackStack();
-                }
-            }
-        });
+        getOnBackPressedDispatcher().addCallback(this, getOnBackPressedCallback());
     }
 
     @Override
@@ -39,5 +31,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             onGrantedCallback.run();
         }
+    }
+
+    public OnBackPressedCallback getOnBackPressedCallback() {
+        return new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                if(fragmentManager.getBackStackEntryCount() != 0) {
+                    fragmentManager.popBackStack();
+                }
+            }
+        };
     }
 }

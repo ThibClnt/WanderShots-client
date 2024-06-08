@@ -4,7 +4,6 @@ import java.util.Date;
 
 public class Walk {
 
-
     private int walkId;
     private String title;
     private Date startTime;

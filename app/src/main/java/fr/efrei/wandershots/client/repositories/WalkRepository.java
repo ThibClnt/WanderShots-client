@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,17 +24,24 @@ public class WalkRepository {
         return instance;
     }
 
-    public void saveWalk(Walk walk) {
+    public int saveWalk(Walk walk) {
         String insertSQL = "INSERT INTO walk (title, start_time, duration, distance, userId) VALUES (?, ?, ?, ?, ?)";
 
         try(Connection connection = ExternalSQLConnection.createConnection()) {
-            PreparedStatement query = connection.prepareStatement(insertSQL) ;
+            PreparedStatement query = connection.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS) ;
             query.setString(1, walk.getTitle());
             query.setTimestamp(2, new java.sql.Timestamp(walk.getStartTime().getTime()));
             query.setLong(3, walk.getDuration());
             query.setDouble(4, walk.getDistance());
             query.setInt(5, walk.getUserId());
             query.executeUpdate();
+
+            ResultSet generatedKeys = query.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1);
+            } else {
+                return -1;
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

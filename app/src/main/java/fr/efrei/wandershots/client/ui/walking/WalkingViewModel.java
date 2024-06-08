@@ -1,11 +1,9 @@
 package fr.efrei.wandershots.client.ui.walking;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
-import android.widget.Toast;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,7 +13,6 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.entities.Picture;
@@ -49,9 +46,12 @@ public class WalkingViewModel extends ViewModel {
     private final MutableLiveData<Date> startTimeLiveData = new MutableLiveData<>(new Date());
     public LiveData<Date> getStartTime() { return startTimeLiveData; }
 
+    private final MutableLiveData<ArrayList<Picture>> picturesLiveData = new MutableLiveData<>(new ArrayList<>());
+    public LiveData<ArrayList<Picture>> getPictures() { return picturesLiveData; }
+
     private final WalkRepository walkRepository;
     private final PictureRepository pictureRepository;
-    private final List<Picture> pictures = new ArrayList<>();
+
     private double deltaDistance;
     private double elapsedTimeBetweenLocations;
 
@@ -61,6 +61,7 @@ public class WalkingViewModel extends ViewModel {
         PolylineOptions polylineOptions = new PolylineOptions()
                 .color(Color.BLUE);
         polylineOptionsLiveData.setValue(polylineOptions);
+
     }
 
     public void updateLocation(Location location) {
@@ -68,6 +69,7 @@ public class WalkingViewModel extends ViewModel {
         lastLocationLiveData.setValue(location);
 
         if (lastLocation != null) {
+            Log.d("WalkingViewModel", "Update location: " + lastLocation + " -> " + location);
             deltaDistance = lastLocation.distanceTo(location);   // in meters
             elapsedTimeBetweenLocations = (location.getTime() - lastLocation.getTime()) / 1000f; // in seconds
 
@@ -99,12 +101,19 @@ public class WalkingViewModel extends ViewModel {
     public void setTitle(String title) {
         titleLiveData.setValue(title);
     }
+
     public void addPicture(Picture picture) {
+        if (lastLocationLiveData.getValue() != null) {
+            Location location = lastLocationLiveData.getValue();
+            picture.setLatitude(location.getLatitude());
+            picture.setLongitude(location.getLongitude());
+        }
+
+        ArrayList<Picture> pictures = picturesLiveData.getValue() != null ? picturesLiveData.getValue() : new ArrayList<>();
         pictures.add(picture);
+        picturesLiveData.setValue(pictures);
     }
-    public List<Picture> getPictures() {
-        return new ArrayList<>(pictures);
-    }
+
     public void stopWalk(Context context) {
         if (startTimeLiveData.getValue() == null || totalDistanceLiveData.getValue() == null)
             return;
@@ -123,17 +132,28 @@ public class WalkingViewModel extends ViewModel {
         walk.setStartTime(startTimeLiveData.getValue());
         walk.setDuration(elapsedTime);
         walk.setDistance(totalDistanceLiveData.getValue());
-        if (user != null) {
+
+        if (user != null)
             walk.setUserId(user.getUserId());
-        }
-        for (Picture picture : pictures) {
-            picture.setWalkId(walk.getWalkId());
-            Toast.makeText(context.getApplicationContext(), "appel au repo",Toast.LENGTH_SHORT ).show();
-            pictureRepository.savePicture(picture);
-            Toast.makeText(context.getApplicationContext(), "retour du repo",Toast.LENGTH_SHORT ).show();
 
-        }
+        int walkId = walkRepository.saveWalk(walk);
 
-        walkRepository.saveWalk(walk);
+        if (picturesLiveData.getValue() != null) {
+            for (Picture picture : picturesLiveData.getValue()) {
+                picture.setWalkId(walkId);
+                pictureRepository.savePicture(picture);
+            }
+        }
+    }
+
+    public void reset() {
+        polylineOptionsLiveData.setValue(new PolylineOptions().color(Color.BLUE));
+        lastLocationLiveData.setValue(null);
+        totalDistanceLiveData.setValue(0.0);
+        elapsedTimeLiveData.setValue(0L);
+        speedLiveData.setValue(0.0);
+        titleLiveData.setValue("");
+        startTimeLiveData.setValue(new Date());
+        picturesLiveData.setValue(new ArrayList<>());
     }
 }

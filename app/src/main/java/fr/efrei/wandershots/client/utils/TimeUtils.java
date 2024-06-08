@@ -26,4 +26,8 @@ public class TimeUtils {
     public static String formatDateTime(Date date) {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(date);
     }
+
+    public static String getCurrentDateTimeString() {
+        return formatDateTime(new Date());
+    }
 }

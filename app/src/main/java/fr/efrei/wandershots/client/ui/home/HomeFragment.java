@@ -15,7 +15,9 @@ import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.android.material.carousel.HeroCarouselStrategy;
 
 import fr.efrei.wandershots.client.R;
+import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.databinding.FragmentHomeBinding;
+import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 
@@ -23,6 +25,7 @@ import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
 
     private HomeViewModel homeViewModel;
+    private CredentialsManager credentialsManager;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -32,6 +35,7 @@ public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        credentialsManager = CredentialsManager.getInstance(requireContext());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -42,8 +46,15 @@ public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
         binding.carouselRecyclerView.setAdapter(adapter);
         binding.carouselRecyclerView.setLayoutManager(new CarouselLayoutManager(new HeroCarouselStrategy()));
 
-        // TODO retreive user name
-        String updated_welcome_message = getString(R.string.welcome_message, "toto");
+        // Greeting message
+        User user = credentialsManager.getCredentialsFromCache();
+        String username = "Anonymous";
+
+        if (user != null) {
+            username = user.getUsername();
+        }
+
+        String updated_welcome_message = getString(R.string.welcome_message, username);
         binding.welcomeMessage.setText(updated_welcome_message);
 
         // Setup the buttons

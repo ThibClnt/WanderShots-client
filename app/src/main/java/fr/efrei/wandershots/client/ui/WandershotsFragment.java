@@ -19,6 +19,8 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 import fr.efrei.wandershots.client.R;
+import fr.efrei.wandershots.client.data.CredentialsManager;
+import fr.efrei.wandershots.client.entities.User;
 
 
 public abstract class WandershotsFragment<T extends ViewBinding> extends Fragment {
@@ -26,12 +28,14 @@ public abstract class WandershotsFragment<T extends ViewBinding> extends Fragmen
     protected Handler handler;
     protected T binding;
     protected String TAG;
+    private CredentialsManager credentialsManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         handler = new Handler();
         TAG = this.getClass().getSimpleName();
+        credentialsManager = CredentialsManager.getInstance(getContext());
     }
 
     @Nullable
@@ -90,5 +94,10 @@ public abstract class WandershotsFragment<T extends ViewBinding> extends Fragmen
 
     protected void debug(String message) {
         Log.d(TAG, message);
+    }
+
+    @Nullable
+    protected User getCurrentUser() {
+        return credentialsManager.getCredentialsFromCache();
     }
 }

@@ -26,7 +26,7 @@
     <string name="engagment_label">Envie de flâner ?</string>
     <string name="start_walk_button">Commencer</string>
     <string name="myPictures">Mes Photos de Marche</string>
-    <string name="welcome_message">Bienvenue %1$s ! Heureux de vous revoir parmi nous pour une splendide marche !</string>
+    <string name="welcome_message">Bienvenue %1$s ! Heureux de vous revoir parmi nous !</string>
   
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Historique des marches</string>
@@ -47,9 +47,9 @@
     <string name="save_picture_button">Sauvegarder l\'image</string>
     <string name="error_create_picture">Erreur lors de la création du fichier pour la photo</string>
     <string name="error_no_picture">Le chemin actuel de la photo est nul</string>
-    <string name="error_read_picture">Probleme à la lecture de l\'image</string>
+    <string name="error_read_picture">Échec de la lecture de l\'image</string>
     <string name="picture_saved">Image enregistrée avec succès</string>
-
+    <string name="cancelPictureButton">Annuler</string>
 
 
 </resources>

@@ -3,11 +3,14 @@ package fr.efrei.wandershots.client.ui.walking;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,6 +34,8 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     private GoogleMap map;
     private MapView mapView;
     private WalkingViewModel viewModel;
+    private LocationManager locationManager;
+    private boolean isTracking = true;
 
     public static WalkingFragment newInstance() {
         return new WalkingFragment();
@@ -39,7 +44,19 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(WalkingViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(WalkingViewModel.class);
+
+        // When back press : reset the viewModel without saving, and navigate back
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                viewModel.reset();
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                if(fragmentManager.getBackStackEntryCount() != 0) {
+                    fragmentManager.popBackStack();
+                }
+            }
+        });
 
         // Setup the buttons
         binding.stopWalk.setOnClickListener(v -> onStopWalk());
@@ -70,8 +87,8 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
             }
         });
 
-        // Start the UI update loop
-        handler.post(updateUIRunnable);
+        viewModel.getPictures().observe(getViewLifecycleOwner(), pictures ->
+                debug("New pictures : " + pictures.size()));
     }
 
     @Override
@@ -80,6 +97,7 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         map.setBuildingsEnabled(true);
 
         if (PermissionUtils.hasLocationPermission(requireContext())) {
+            locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
             startLocationTracking();
         } else {
             PermissionUtils.requestLocationPermission(requireActivity(), this::startLocationTracking);
@@ -88,33 +106,34 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
 
     @SuppressLint("MissingPermission")
     public void startLocationTracking() {
-        LocationManager locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
-
         map.setMyLocationEnabled(true);
         map.setOnMyLocationButtonClickListener(() -> {
-
+            isTracking = true;
             centerOnLocation();
-            debug("Centering on location");
-
             return true;
         });
+        map.setOnCameraMoveStartedListener(reason -> {
+            if (reason == GoogleMap.OnCameraMoveStartedListener.REASON_GESTURE) {
+                isTracking = false;
+            }
+        });
 
-        Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (lastLocation != null) {
-            viewModel.updateLocation(lastLocation);
-        }
-
-        centerOnLocation();
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, viewModel::updateLocation);
+        debug("Starting location tracking");
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, onLocationUpdate);
     }
 
+    private final LocationListener onLocationUpdate = new LocationListener() {
+        @Override
+        public void onLocationChanged(@NonNull Location location) {
+            viewModel.updateLocation(location);
+            if (isTracking)
+                centerOnLocation();
+        }
+    };
+
     private void centerOnLocation() {
-        debug("Entering centerOnLocation");
         handler.post(() -> {
-            debug("Posting centerOnLocation");
             Location lastLocation = viewModel.getLastLocation().getValue();
-            debug("Last location: " + lastLocation);
 
             if (lastLocation != null) {
                 debug("Centering on location " + lastLocation.getLatitude() + ", " + lastLocation.getLongitude());
@@ -136,6 +155,7 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     private final Runnable updateUIRunnable = new Runnable() {
         @Override
         public void run() {
+            debug("Update UI");
             viewModel.updateTime();
             handler.postDelayed(this, 1000);
         }
@@ -144,6 +164,7 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
     public void onStopWalk() {
         new Thread(() -> viewModel.stopWalk(getContext())).start();
         navigateToFragment(TabbedFragment.newInstance(), false);
+        viewModel.reset();
     }
 
     @Override
@@ -151,6 +172,7 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         super.onPause();
         handler.removeCallbacks(updateUIRunnable);
         mapView.onPause();
+        locationManager.removeUpdates(onLocationUpdate);
     }
 
     @Override

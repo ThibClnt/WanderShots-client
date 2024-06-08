@@ -21,7 +21,7 @@
     <!-- Home fragment -->
     <string name="home_tab">Home</string>
     <string name="myPictures">My Walk Pictures</string>
-    <string name="welcome_message">Hello %1$s ! Happy to see you again for a new wonderful walk !</string>
+    <string name="welcome_message">Hello %1$s ! Happy to see you again !</string>
     <string name="distanceTraveled">Total Distance Traveled</string>
     <string name="pointUnit">pts</string>
     <string name="distanceUnit">km</string>
@@ -42,13 +42,15 @@
     <string name="save_walk_name">Save</string>
     <string name="position_marker">My position</string>
     <string name="speed">Speed</string>
+
     <!-- Picture fragment -->
     <string name="take_picture_button">Take a picture</string>
     <string name="picture_title_input">Title</string>
     <string name="save_picture_button">Save picture</string>
     <string name="error_create_picture">Error creating a file for the picture</string>
     <string name="error_no_picture">CurrentPhotoPath is null</string>
-    <string name="error_read_picture">could not read image</string>
-    <string name="picture_saved">picture saved successfuly</string>
+    <string name="error_read_picture">Could not read image</string>
+    <string name="picture_saved">Picture saved successfuly</string>
+    <string name="cancelPictureButton">Annuler</string>
 
 </resources>
