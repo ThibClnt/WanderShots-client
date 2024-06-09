@@ -22,6 +22,11 @@ public class MainActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, getOnBackPressedCallback());
     }
 
+    /**
+     * This method is called when the user has granted or denied the permissions requested by the application.
+     * It is used to handle the result of the permission request.
+     * If the permissions are granted, the callback associated with the request code is executed.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -33,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method returns a callback that handles the back press event in a generic way for all of the application.
+     * The callback can be changed to handle the back press event for a specific fragment.
+     */
     public OnBackPressedCallback getOnBackPressedCallback() {
         return new OnBackPressedCallback(true) {
             @Override

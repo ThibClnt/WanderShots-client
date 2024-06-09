@@ -19,7 +19,10 @@ import fr.efrei.wandershots.client.databinding.FragmentHistoryBinding;
 import fr.efrei.wandershots.client.entities.Walk;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 
-
+/**
+ * This fragment is responsible for displaying the history of the user.
+ * It shows the walks of the user.
+ */
 public class HistoryFragment extends WandershotsFragment<FragmentHistoryBinding> {
 
     private HistoryViewModel viewModel;
@@ -36,6 +39,9 @@ public class HistoryFragment extends WandershotsFragment<FragmentHistoryBinding>
         viewModel.getWalks().observe(getViewLifecycleOwner(), this::displayWalks);
     }
 
+    /**
+     * This function is called when the walks of the user are retrieved, to display them.
+     */
     private void displayWalks(List<Walk> walks) {
         LinearLayout walksContainer = binding.walksContainer;
         walksContainer.removeAllViews();
@@ -46,6 +52,9 @@ public class HistoryFragment extends WandershotsFragment<FragmentHistoryBinding>
         }
     }
 
+    /**
+     * Create a list item for a walk.
+     */
     private View createWalkView(Walk walk) {
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View walkView = inflater.inflate(R.layout.item_walk, null, false);

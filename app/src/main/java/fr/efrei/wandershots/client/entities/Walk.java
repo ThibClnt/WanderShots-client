@@ -2,6 +2,9 @@ package fr.efrei.wandershots.client.entities;
 
 import java.util.Date;
 
+/**
+ * Represents a walk of a user.
+ */
 public class Walk {
 
     private int walkId;

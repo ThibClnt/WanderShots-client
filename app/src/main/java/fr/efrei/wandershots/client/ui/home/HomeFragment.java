@@ -19,7 +19,10 @@ import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingFragment;
 
-
+/**
+ * This fragment is responsible for the home screen of the application.
+ * It displays the carousel of the pictures of the user and the total distance traveled.
+ */
 public class HomeFragment extends WandershotsFragment<FragmentHomeBinding> {
 
     private HomeViewModel homeViewModel;

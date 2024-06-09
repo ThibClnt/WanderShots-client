@@ -23,6 +23,11 @@ import fr.efrei.wandershots.client.repositories.WalkRepository;
 import fr.efrei.wandershots.client.utils.LocationUtils;
 import fr.efrei.wandershots.client.utils.TimeUtils;
 
+/**
+ * This class is the ViewModel for the WalkingFragment.
+ * It is responsible for managing the data of the walking screen of the application.
+
+ */
 public class WalkingViewModel extends ViewModel {
 
     private final MutableLiveData<PolylineOptions> polylineOptionsLiveData = new MutableLiveData<>();
@@ -64,6 +69,10 @@ public class WalkingViewModel extends ViewModel {
 
     }
 
+    /**
+     * This method is called when the location of the user changes.
+     * It updates the distance, speed, and polyline of the walk.
+     */
     public void updateLocation(Location location) {
         Location lastLocation = lastLocationLiveData.getValue();
         lastLocationLiveData.setValue(location);
@@ -87,6 +96,9 @@ public class WalkingViewModel extends ViewModel {
         }
     }
 
+    /**
+     * This method is called every second to update the time, distance, and speed of the walk.
+     */
     public void updateTime() {
         if (startTimeLiveData.getValue() == null)
             return;
@@ -102,6 +114,9 @@ public class WalkingViewModel extends ViewModel {
         titleLiveData.setValue(title);
     }
 
+    /**
+     * Add a picture to the walk.
+     */
     public void addPicture(Picture picture) {
         if (lastLocationLiveData.getValue() != null) {
             Location location = lastLocationLiveData.getValue();
@@ -114,6 +129,11 @@ public class WalkingViewModel extends ViewModel {
         picturesLiveData.setValue(pictures);
     }
 
+    /**
+     * Stop the walk and save it in the database.
+     * It also saves the pictures taken during the walk.
+     * After saving the walk, it resets the walk data.
+     */
     public void stopWalk(Context context) {
         if (startTimeLiveData.getValue() == null || totalDistanceLiveData.getValue() == null)
             return;
@@ -150,6 +170,9 @@ public class WalkingViewModel extends ViewModel {
         reset();
     }
 
+    /**
+     * Reset the walk data.
+     */
     public void reset() {
         polylineOptionsLiveData.postValue(new PolylineOptions().color(Color.BLUE));
         lastLocationLiveData.postValue(null);

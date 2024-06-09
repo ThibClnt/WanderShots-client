@@ -19,7 +19,9 @@ import fr.efrei.wandershots.client.exceptions.CredentialsManagmentException;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.tabs.TabbedFragment;
 
-
+/**
+ * This fragment is responsible for the authentication of the user.
+ */
 public class AuthenticationFragment extends WandershotsFragment<FragmentAuthenticationBinding> {
 
     private CredentialsManager credentialsManager;
@@ -46,6 +48,9 @@ public class AuthenticationFragment extends WandershotsFragment<FragmentAuthenti
         checkAlreadyAuthenticated();
     }
 
+    /**
+     * This function checks if the user is already authenticated and navigates to the next fragment if it is the case.
+     */
     private void checkAlreadyAuthenticated() {
         new Thread(() -> {
             try {
@@ -59,6 +64,10 @@ public class AuthenticationFragment extends WandershotsFragment<FragmentAuthenti
         }).start();
     }
 
+    /**
+     * This function is called when the login button is clicked.
+     * It checks if the fields are filled correctly and then authenticate the user.
+     */
     private void onLoginButtonClicked() {
         // Check if the fields are empty
         String fillThisFieldError = getString(R.string.fill_this_field);
@@ -87,6 +96,10 @@ public class AuthenticationFragment extends WandershotsFragment<FragmentAuthenti
 
     }
 
+    /**
+     * This function validates a field by checking if it is empty.
+     * If the field is empty, an error message is displayed.
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean validateField(TextInputEditText field, String errorMessage) {
         if (field.getText() == null || StringUtils.isNullOrEmpty(field.getText().toString())) {

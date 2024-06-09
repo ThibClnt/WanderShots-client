@@ -17,6 +17,10 @@ import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.repositories.PictureRepository;
 import fr.efrei.wandershots.client.repositories.UserRepository;
 
+/**
+ * This class is the ViewModel for the HomeFragment.
+ * It is responsible for managing the data of the home screen of the application.
+ */
 public class HomeViewModel extends AndroidViewModel {
 
     private final MutableLiveData<Double> totalDistanceLiveData = new MutableLiveData<>(0.0);
@@ -35,6 +39,7 @@ public class HomeViewModel extends AndroidViewModel {
         if (user == null)
             throw new IllegalStateException("User must be logged in to access home view model");
 
+        // Load the user data : total distance and pictures
         new Thread(() -> {
             double totalDistance = 0;
             try {

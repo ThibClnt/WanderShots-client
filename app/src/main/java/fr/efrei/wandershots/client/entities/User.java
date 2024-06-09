@@ -1,5 +1,8 @@
 package fr.efrei.wandershots.client.entities;
 
+/**
+ * Represents a user of the application and their credentials.
+ */
 public class User {
 
     private int userId;

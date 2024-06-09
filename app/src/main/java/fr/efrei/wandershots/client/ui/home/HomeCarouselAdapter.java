@@ -17,6 +17,10 @@ import java.util.List;
 import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.entities.Picture;
 
+/**
+ * This class is the adapter for the carousel of the home fragment.
+ * The carousel displays the pictures of the user.
+ */
 public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapter.HomeCarouselViewHolder> {
 
     private final RequestManager glide;
@@ -27,6 +31,9 @@ public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapte
         this.glide = glide;
     }
 
+    /**
+     * Set the pictures to display in the carousel.
+     */
     public void setPictures(List<Picture> pictures) {
         this.pictures.clear();
         this.pictures.addAll(pictures);
@@ -52,6 +59,10 @@ public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapte
         return pictures.size();
     }
 
+    /**
+     * This class represents a view holder for the carousel.
+     * It holds the image view of the carousel item.
+     */
     public static class HomeCarouselViewHolder extends RecyclerView.ViewHolder {
         public final ImageView imageView;
 
@@ -60,6 +71,9 @@ public class HomeCarouselAdapter extends RecyclerView.Adapter<HomeCarouselAdapte
             imageView = itemView.findViewById(R.id.carousel_image_view);
         }
 
+        /**
+         * Update the image of the carousel item with the given image data using Glide.
+         */
         public void updateImage(byte[] imageData, RequestManager glide) {
             glide.load(imageData).into(imageView);
         }

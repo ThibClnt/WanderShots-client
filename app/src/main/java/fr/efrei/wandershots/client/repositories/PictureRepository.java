@@ -10,6 +10,10 @@ import java.util.List;
 import fr.efrei.wandershots.client.datasource.ExternalSQLConnection;
 import fr.efrei.wandershots.client.entities.Picture;
 
+/**
+ * Repository for the pictures of the application.
+ * This class is responsible for managing the pictures in the database.
+ */
 public class PictureRepository {
 
     private static PictureRepository instance;

@@ -1,5 +1,9 @@
 package fr.efrei.wandershots.client.entities;
 
+/**
+ * Represents a picture taken during a walk.
+ * Pictures are geolocated and have a title.
+ */
 public class Picture {
 
     private int pictureId;

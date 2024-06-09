@@ -17,7 +17,9 @@ import fr.efrei.wandershots.client.databinding.FragmentTabbedBinding;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.authentication.AuthenticationFragment;
 
-
+/**
+ * This fragment is responsible for the tabbed view of the application.
+ */
 public class TabbedFragment extends WandershotsFragment<FragmentTabbedBinding> {
 
     private static final int[] TAB_TITLES = new int[]{R.string.home_tab, R.string.walks_history_tab};

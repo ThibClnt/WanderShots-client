@@ -22,7 +22,14 @@ import fr.efrei.wandershots.client.R;
 import fr.efrei.wandershots.client.data.CredentialsManager;
 import fr.efrei.wandershots.client.entities.User;
 
-
+/**
+ * This class is the base class for all fragments of the application.
+ * It provides common methods and properties to all fragments.
+ * Examples of common methods are navigation methods, logging methods, and toast methods.
+ * Examples of common properties are the handler, the binding, and the TAG.
+ *
+ * @param <T> The type of the view binding class of the fragment.
+ */
 public abstract class WandershotsFragment<T extends ViewBinding> extends Fragment {
 
     protected Handler handler;
@@ -60,10 +67,18 @@ public abstract class WandershotsFragment<T extends ViewBinding> extends Fragmen
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+    /**
+     * This method is responsible for navigating to a fragment.
+     * The fragment is added to the back stack.
+     */
     public void navigateToFragment(Fragment fragment) {
         navigateToFragment(fragment, true);
     }
 
+    /**
+     * This method is responsible for navigating to a fragment.
+     * The fragment is added to the back stack if the addToBackStack parameter is true.
+     */
     public void navigateToFragment(Fragment fragment, boolean addToBackStack) {
         if (addToBackStack) {
             requireActivity().getSupportFragmentManager().beginTransaction()
@@ -77,6 +92,10 @@ public abstract class WandershotsFragment<T extends ViewBinding> extends Fragmen
         }
     }
 
+    /**
+     * This method is responsible for popping the back stack.
+     * Popping the back stack means navigating back to the previous fragment.
+     */
     public void popBackStack() {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() != 0) {
@@ -84,18 +103,30 @@ public abstract class WandershotsFragment<T extends ViewBinding> extends Fragmen
         }
     }
 
+    /**
+     * This method is responsible for showing a toast message from a string resource.
+     */
     public void showToastMessage(int resId) {
         handler.post(() -> Toast.makeText(getContext(), resId, Toast.LENGTH_SHORT).show());
     }
 
+    /**
+     * This method is used to log an error message.
+     */
     protected void logError(String message, Throwable e) {
         Log.e(TAG, message, e);
     }
 
+    /**
+     * This method is used to log a debug message.
+     */
     protected void debug(String message) {
         Log.d(TAG, message);
     }
 
+    /**
+     * This method is used to access the current authenticated user.
+     */
     @Nullable
     protected User getCurrentUser() {
         return credentialsManager.getCredentialsFromCache();

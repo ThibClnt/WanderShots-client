@@ -29,6 +29,10 @@ import fr.efrei.wandershots.client.utils.LocationUtils;
 import fr.efrei.wandershots.client.utils.PermissionUtils;
 import fr.efrei.wandershots.client.utils.TimeUtils;
 
+/**
+ * This fragment is responsible for the walking screen of the application.
+ * It allows the user to track his walk and take pictures.
+ */
 public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding> implements OnMapReadyCallback {
 
     private GoogleMap map;
@@ -91,6 +95,10 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
                 debug("New pictures : " + pictures.size()));
     }
 
+    /**
+     * This function is called when the map is ready.
+     * It initializes the map and starts the location tracking.
+     */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
@@ -104,6 +112,10 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         }
     }
 
+    /**
+     * This function starts the location tracking.
+     * It centers the map on the user's location and updates the polyline when the location changes.
+     */
     @SuppressLint("MissingPermission")
     public void startLocationTracking() {
         map.setMyLocationEnabled(true);
@@ -122,6 +134,9 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, onLocationUpdate);
     }
 
+    /**
+     * This listener is called when the location changes.
+     */
     private final LocationListener onLocationUpdate = new LocationListener() {
         @Override
         public void onLocationChanged(@NonNull Location location) {
@@ -131,6 +146,9 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         }
     };
 
+    /**
+     * This function centers the map on the user's location.
+     */
     private void centerOnLocation() {
         handler.post(() -> {
             Location lastLocation = viewModel.getLastLocation().getValue();
@@ -143,6 +161,9 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         });
     }
 
+    /**
+     * This function updates the map with the new polyline.
+     */
     private void updateMap() {
         handler.post(() -> {
             if (map != null && viewModel.getPolylineOptions().getValue() != null) {
@@ -152,6 +173,10 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         });
     }
 
+    /**
+     * This runnable is called every second to update the UI with the new data.
+     * It updates the time, distance and speed.
+     */
     private final Runnable updateUIRunnable = new Runnable() {
         @Override
         public void run() {
@@ -161,6 +186,11 @@ public class WalkingFragment extends WandershotsFragment<FragmentWalkingBinding>
         }
     };
 
+    /**
+     * This function is called when the user stops the walk.
+     * It stops the walk and navigates back to the home screen.
+     * Stopping the walk saves the walk in the database.
+     */
     public void onStopWalk() {
         new Thread(() -> viewModel.stopWalk(getContext())).start();
         navigateToFragment(TabbedFragment.newInstance(), false);

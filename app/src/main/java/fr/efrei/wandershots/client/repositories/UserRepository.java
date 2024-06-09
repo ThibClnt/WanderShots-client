@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import fr.efrei.wandershots.client.datasource.ExternalSQLConnection;
 import fr.efrei.wandershots.client.entities.User;
 
+/**
+ * Repository for the users of the application.
+ * This class is responsible for managing the users in the database.
+ */
 public class UserRepository {
     // Singleton pattern
 

@@ -17,7 +17,10 @@ import fr.efrei.wandershots.client.databinding.FragmentSignInBinding;
 import fr.efrei.wandershots.client.exceptions.CredentialsManagmentException;
 import fr.efrei.wandershots.client.ui.WandershotsFragment;
 
-
+/**
+ * This fragment is responsible for the sign in of the user.
+ * It allows the user to create an account.
+ */
 public class SignInFragment extends WandershotsFragment<FragmentSignInBinding> {
 
     private CredentialsManager credentialsManager;
@@ -38,6 +41,11 @@ public class SignInFragment extends WandershotsFragment<FragmentSignInBinding> {
         binding.buttonSave.setOnClickListener(v -> onSignInButtonClicked());
     }
 
+    /**
+     * This function is called when the user clicks on the sign in button.
+     * It checks if the fields are not empty and if the passwords match.
+     * If everything is correct, it signs in the user.
+     */
     @SuppressWarnings("ConstantConditions")
     private void onSignInButtonClicked() {
         // Check if the fields are empty
@@ -79,6 +87,10 @@ public class SignInFragment extends WandershotsFragment<FragmentSignInBinding> {
         }).start();
     }
 
+    /**
+     * This function checks if a field is not empty.
+     * If the field is empty, it displays an error message.
+     */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     private boolean validateField(TextInputEditText field, String errorMessage) {
         if (field.getText() == null || StringUtils.isNullOrEmpty(field.getText().toString())) {

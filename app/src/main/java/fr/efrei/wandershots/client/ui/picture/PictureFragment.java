@@ -24,6 +24,10 @@ import fr.efrei.wandershots.client.ui.WandershotsFragment;
 import fr.efrei.wandershots.client.ui.walking.WalkingViewModel;
 import fr.efrei.wandershots.client.utils.PermissionUtils;
 
+/**
+ * This fragment is responsible for the picture screen of the application.
+ * It allows the user to take a picture and save it.
+ */
 public class PictureFragment extends WandershotsFragment<FragmentPictureBinding> {
     private ActivityResultLauncher<Intent> takePictureLauncher;
     private WalkingViewModel walkingViewModel;
@@ -61,6 +65,10 @@ public class PictureFragment extends WandershotsFragment<FragmentPictureBinding>
         binding.savePictureButton.setOnClickListener(v -> savePicture());
     }
 
+    /**
+     * This function is called when the user clicks on the take picture button.
+     * It dispatches the intent to take a picture, depending on the permissions.
+     */
     private void dispatchTakePictureIntent() {
         if (PermissionUtils.hasCameraPermission(requireContext()))
             takePicture();
@@ -68,6 +76,10 @@ public class PictureFragment extends WandershotsFragment<FragmentPictureBinding>
             PermissionUtils.requestCameraPermission(requireActivity(), this::takePicture);
     }
 
+    /**
+     * This function is called when the user takes a picture.
+     * It creates a file to store the picture and launches the camera intent.
+     */
     public void takePicture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
@@ -85,6 +97,10 @@ public class PictureFragment extends WandershotsFragment<FragmentPictureBinding>
         }
     }
 
+    /**
+     * This function is called when the user clicks on the save picture button.
+     * It saves the picture in the context of the current walk.
+     */
     private void savePicture() {
         try {
             Picture picture = pictureViewModel.popPicture();

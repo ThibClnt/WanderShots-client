@@ -12,6 +12,9 @@ import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.exceptions.CredentialsManagmentException;
 import fr.efrei.wandershots.client.repositories.UserRepository;
 
+/**
+ * This class is responsible for managing the credentials of the user.
+ */
 public class CredentialsManager {
     private static final String SHARED_PREF_NAME = "LoginPrefs";
 

@@ -12,6 +12,10 @@ import fr.efrei.wandershots.client.datasource.ExternalSQLConnection;
 import fr.efrei.wandershots.client.entities.User;
 import fr.efrei.wandershots.client.entities.Walk;
 
+/**
+ * Repository for the walks of the application.
+ * This class is responsible for managing the walks in the database.
+ */
 public class WalkRepository {
 
     private static WalkRepository instance;

@@ -22,6 +22,9 @@ import java.io.InputStream;
 import fr.efrei.wandershots.client.entities.Picture;
 import fr.efrei.wandershots.client.utils.TimeUtils;
 
+/**
+ * This class is the ViewModel for the PictureFragment.
+ * It is responsible for managing the data of the picture screen of the application. */
 public class PictureViewModel extends AndroidViewModel {
 
     private final MutableLiveData<String> titleLiveData = new MutableLiveData<>(getDefaultTitle());
@@ -42,6 +45,10 @@ public class PictureViewModel extends AndroidViewModel {
         pathLiveData.setValue(path);
     }
 
+    /**
+     * Create a new picture file and return the URI of the file.
+     * The file is created in the external pictures directory of the application or in the MediaStore, depending on the Android version.
+     */
     public Uri createPictureFile() throws IOException {
         // Create the file name
         String imageFileName = "JPEG_" + titleLiveData.getValue() + "_";
@@ -80,6 +87,9 @@ public class PictureViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Get the bytes array of the picture from the URI.
+     */
     private byte[] getPictureBytes() throws IOException {
         Uri uri = pathLiveData.getValue();
         if (uri == null) {
@@ -105,6 +115,9 @@ public class PictureViewModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Create a new Picture object with the current title and picture data, and reset the title and path.
+     */
     public Picture popPicture() throws IOException {
         Picture picture = new Picture();
         picture.setTitle(titleLiveData.getValue() == null || titleLiveData.getValue().isEmpty() ? getDefaultTitle() : titleLiveData.getValue());
@@ -117,6 +130,9 @@ public class PictureViewModel extends AndroidViewModel {
         return picture;
     }
 
+    /**
+     * Get the default title for a picture (if no title is provided).
+     */
     private static String getDefaultTitle() {
         return "Wandershots - " + TimeUtils.getCurrentDateTimeString();
     }
