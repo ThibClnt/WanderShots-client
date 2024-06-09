@@ -26,7 +26,7 @@
     <string name="engagment_label">Envie de flâner ?</string>
     <string name="start_walk_button">Commencer</string>
     <string name="myPictures">Mes Photos de Marche</string>
-    <string name="welcome_message">Bienvenue %1$s ! Heureux de vous revoir parmi nous !</string>
+    <string name="welcome_message">Bienvenue %1$s !\nHeureux de vous revoir parmi nous !</string>
   
     <!-- Walks history fragment -->
     <string name="walks_history_tab">Historique des marches</string>
@@ -41,6 +41,7 @@
     <string name="save_walk_name">Entrer</string>
     <string name="position_marker">Ma position</string>
     <string name="speed">Vitesse</string>
+
     <!-- Picture fragment -->
     <string name="take_picture_button">Prendre une photo</string>
     <string name="picture_title_input">Titre</string>

@@ -21,7 +21,7 @@
     <!-- Home fragment -->
     <string name="home_tab">Home</string>
     <string name="myPictures">My Walk Pictures</string>
-    <string name="welcome_message">Hello %1$s ! Happy to see you again !</string>
+    <string name="welcome_message">Hello %1$s !\nHappy to see you again !</string>
     <string name="distanceTraveled">Total Distance Traveled</string>
     <string name="pointUnit">pts</string>
     <string name="distanceUnit">km</string>
